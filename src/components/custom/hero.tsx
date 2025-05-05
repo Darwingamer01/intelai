@@ -5,6 +5,10 @@ import Image from "next/image"
 import { gsap } from "gsap"
 import { Button } from "@/components/ui/button"
 import { MessageSquare, ArrowRight } from "lucide-react"
+import dynamic from "next/dynamic";
+
+
+const ModelViewer = dynamic(() => import('@/components/model/model'), { ssr: false });
 
 export default function Hero() {
   const heroRef = useRef<HTMLDivElement>(null)
@@ -117,17 +121,8 @@ export default function Hero() {
         {/* Hero Image */}
         <div className="hero-image relative z-10 flex justify-center">
           <div className="relative w-full max-w-lg aspect-square">
-            <Image
-              src="/placeholder.svg?height=600&width=600"
-              alt="AI Robot Hand"
-              width={600}
-              height={600}
-              className="object-contain"
-              priority
-            />
-
-            {/* Glowing effect */}
-            <div className="absolute inset-0 bg-gradient-to-r from-purple-500/20 to-teal-400/20 rounded-full blur-xl"></div>
+            <ModelViewer />
+            <div className="absolute inset-0 bg-gradient-to-r from-purple-500/20 to-teal-400/20 rounded-full blur-xl pointer-events-none"></div>
           </div>
         </div>
       </div>
