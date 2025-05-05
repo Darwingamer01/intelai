@@ -43,7 +43,29 @@ export default function SignUp() {
     // Create a GSAP timeline for the animations
     const tl = gsap.timeline()
 
-    // Animate the background elements
+    const ctx = gsap.context(()=>{
+
+      gsap.set(".particle", {
+              x: () => Math.random() * window.outerWidth,
+              y: () => Math.random() * window.innerHeight,
+              opacity: () => Math.random() * 0.5 + 0.2,
+              scale: () => Math.random() * 0.8 + 0.2,
+            })
+        
+            gsap.to(".particle", {
+              x: "+=50",
+              y: "+=30",
+              rotation: "+=15",
+              duration: 8,
+              ease: "sine.inOut",
+              repeat: -1,
+              yoyo: true,
+              stagger: 0.1,
+            })
+
+
+
+       // Animate the background elements
     gsap.to(".bg-blob", {
       x: "random(-20, 20)",
       y: "random(-20, 20)",
@@ -103,11 +125,9 @@ export default function SignUp() {
         },
         "-=0.2",
       )
+    }, containerRef)
 
-    // Cleanup function
-    return () => {
-      tl.kill()
-    }
+    return ()=> ctx.revert() // Cleanup function
   }, [])
 
   // Animation for step transition
@@ -182,6 +202,19 @@ export default function SignUp() {
       ref={containerRef}
       className="min-h-screen flex items-center justify-center bg-gray-900 py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden"
     >
+
+      {[...Array(20)].map((_, i) => (
+        <div
+          key={i}
+          className="particle absolute rounded-full bg-purple-500 opacity-20"
+          style={{
+            width: `${10 + i * 0.5 * 10 + 25}px`,
+            height: `${10 + i * 0.5* 10 + 25}px`,
+          }}
+        />
+      ))}
+
+
       {/* Animated background blobs */}
       <div className="bg-blob absolute top-0 left-0 w-96 h-96 bg-purple-600/20 rounded-full filter blur-[100px]"></div>
       <div className="bg-blob absolute bottom-0 right-0 w-96 h-96 bg-teal-400/20 rounded-full filter blur-[100px]"></div>

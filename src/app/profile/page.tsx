@@ -55,6 +55,8 @@ export default function Profile() {
     // Create a GSAP timeline for the animations
     const tl = gsap.timeline()
 
+    const ctx = gsap.context(()=>{
+        
     // Animate the profile elements
     tl.from(".profile-header", {
       opacity: 0,
@@ -122,9 +124,12 @@ export default function Profile() {
       ease: "none",
     })
 
+    }, profileRef)
+
+
     // Cleanup function
     return () => {
-      tl.kill()
+      ctx.revert() // Revert the GSAP context
     }
   }, [])
 

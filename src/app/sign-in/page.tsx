@@ -6,7 +6,7 @@ import { useState, useEffect, useRef } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { gsap } from "gsap"
-import { Mail, Lock, ArrowRight, Github, Twitter, Facebook } from "lucide-react"
+import { Mail, Lock, ArrowRight, Github, Facebook, Twitter } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 
@@ -19,103 +19,141 @@ export default function SignIn() {
   const formRef = useRef<HTMLDivElement>(null)
   const containerRef = useRef<HTMLDivElement>(null)
 
+  // useEffect(() => {
+  //   // Create a GSAP timeline for the animations
+  //   const tl = gsap.timeline()
+
+  //   setTimeout(()=>{
+  //     gsap.set(".particle", {
+  //       x: () => Math.random() * window.innerWidth,
+  //       y: () => Math.random() * window.innerHeight,
+  //       opacity: () => Math.random() * 0.5 + 0.2,
+  //       scale: () => Math.random() * 0.8 + 0.2,
+  //     })
+  
+  //     // Animate the background particles
+  //     gsap.to(".particle", {
+  //       x: "+=50",
+  //       y: "+=30",
+  //       rotation: "+=15",
+  //       duration: 8,
+  //       ease: "sine.inOut",
+  //       repeat: -1,
+  //       yoyo: true,
+  //       stagger: 0.1,
+  //     })
+  
+  //     // Animate the form elements
+  //     tl.from(".signin-title", {
+  //       opacity: 0,
+  //       y: -30,
+  //       duration: 0.8,
+  //       ease: "power3.out",
+  //     })
+  //       .from(
+  //         ".signin-subtitle",
+  //         {
+  //           opacity: 0,
+  //           y: -20,
+  //           duration: 0.8,
+  //           ease: "power3.out",
+  //         },
+  //         "-=0.6",
+  //       )
+  //       .from(
+  //         ".form-field",
+  //         {
+  //           opacity: 0,
+  //           y: 20,
+  //           duration: 0.6,
+  //           stagger: 0.2,
+  //           ease: "power3.out",
+  //         },
+  //         "-=0.4",
+  //       )
+  //       .from(
+  //         ".signin-button",
+  //         {
+  //           opacity: 0,
+  //           y: 20,
+  //           duration: 0.6,
+  //           ease: "power3.out",
+  //         },
+  //         "-=0.2",
+  //       )
+  //       .from(
+  //         ".divider",
+  //         {
+  //           width: 0,
+  //           duration: 0.8,
+  //           ease: "power3.out",
+  //         },
+  //         "-=0.4",
+  //       )
+  //       .from(
+  //         ".social-button",
+  //         {
+  //           opacity: 0,
+  //           scale: 0.8,
+  //           duration: 0.6,
+  //           stagger: 0.1,
+  //           ease: "back.out(1.7)",
+  //         },
+  //         "-=0.4",
+  //       )
+  //       .from(
+  //         ".signup-link",
+  //         {
+  //           opacity: 0,
+  //           y: 20,
+  //           duration: 0.6,
+  //           ease: "power3.out",
+  //         },
+  //         "-=0.2",
+  //       )
+  //   }, 0);
+    
+    
+
+  //   // Cleanup function
+  //   return () => {
+  //     tl.kill()
+  //   }
+  // }, [])
+
   useEffect(() => {
-    // Create a GSAP timeline for the animations
-    const tl = gsap.timeline()
-
-    // Animate the background particles
-    gsap.set(".particle", {
-      x: () => Math.random() * window.innerWidth,
-      y: () => Math.random() * window.innerHeight,
-      opacity: () => Math.random() * 0.5 + 0.2,
-      scale: () => Math.random() * 0.8 + 0.2,
-    })
-
-    gsap.to(".particle", {
-      x: "+=50",
-      y: "+=30",
-      rotation: "+=15",
-      duration: 8,
-      ease: "sine.inOut",
-      repeat: -1,
-      yoyo: true,
-      stagger: 0.1,
-    })
-
-    // Animate the form elements
-    tl.from(".signin-title", {
-      opacity: 0,
-      y: -30,
-      duration: 0.8,
-      ease: "power3.out",
-    })
-      .from(
-        ".signin-subtitle",
-        {
-          opacity: 0,
-          y: -20,
-          duration: 0.8,
-          ease: "power3.out",
-        },
-        "-=0.6",
-      )
-      .from(
-        ".form-field",
-        {
-          opacity: 0,
-          y: 20,
-          duration: 0.6,
-          stagger: 0.2,
-          ease: "power3.out",
-        },
-        "-=0.4",
-      )
-      .from(
-        ".signin-button",
-        {
-          opacity: 0,
-          y: 20,
-          duration: 0.6,
-          ease: "power3.out",
-        },
-        "-=0.2",
-      )
-      .from(
-        ".divider",
-        {
-          width: 0,
-          duration: 0.8,
-          ease: "power3.out",
-        },
-        "-=0.4",
-      )
-      .from(
-        ".social-button",
-        {
-          opacity: 0,
-          scale: 0.8,
-          duration: 0.6,
-          stagger: 0.1,
-          ease: "back.out(1.7)",
-        },
-        "-=0.4",
-      )
-      .from(
-        ".signup-link",
-        {
-          opacity: 0,
-          y: 20,
-          duration: 0.6,
-          ease: "power3.out",
-        },
-        "-=0.2",
-      )
-
-    // Cleanup function
-    return () => {
-      tl.kill()
-    }
+    const ctx = gsap.context(() => {
+      gsap.set(".particle", {
+        x: () => Math.random() * window.innerWidth,
+        y: () => Math.random() * window.innerHeight,
+        opacity: () => Math.random() * 0.5 + 0.2,
+        scale: () => Math.random() * 0.8 + 0.2,
+      })
+  
+      gsap.to(".particle", {
+        x: "+=50",
+        y: "+=30",
+        rotation: "+=15",
+        duration: 8,
+        ease: "sine.inOut",
+        repeat: -1,
+        yoyo: true,
+        stagger: 0.1,
+      })
+  
+      const tl = gsap.timeline()
+      tl.from(".signin-title", { opacity: 0, y: -30, duration: 0.8, ease: "power3.out" })
+        .from(".signin-subtitle", { opacity: 0, y: -20, duration: 0.8, ease: "power3.out" }, "-=0.6")
+        .from(".form-field", { opacity: 0, y: 20, duration: 0.6, stagger: 0.2, ease: "power3.out" }, "-=0.4")
+        .from(".signin-button", { opacity: 0, y: 20, duration: 0.6, ease: "power3.out" }, "-=0.2")
+        .from(".divider", { width: 0, duration: 0.8, ease: "power3.out" }, "-=0.4")
+        .from(".social-button", { opacity: 0, scale: 0.8, duration: 0.6, stagger: 0.1, ease: "back.out(1.7)" }, "-=0.4")
+        .from(".signup-link", { opacity: 0, y: 20, duration: 0.6, ease: "power3.out" }, "-=0.2")
+    }, containerRef)
+  
+    return () => ctx.revert()
   }, [])
+  
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -149,8 +187,8 @@ export default function SignIn() {
           key={i}
           className="particle absolute rounded-full bg-purple-500 opacity-20"
           style={{
-            width: `${Math.random() * 20 + 5}px`,
-            height: `${Math.random() * 20 + 5}px`,
+            width: `${10 + i * 2 * 10 + 5}px`,
+            height: `${10 + i * 2* 10 + 5}px`,
           }}
         />
       ))}
@@ -232,7 +270,7 @@ export default function SignIn() {
           </Button>
         </form>
 
-        <div className="mt-8">
+        {/* <div className="mt-8">
           <div className="divider relative flex items-center justify-center">
             <div className="absolute inset-0 flex items-center">
               <div className="w-full border-t border-gray-600"></div>
@@ -251,7 +289,7 @@ export default function SignIn() {
               <Facebook className="h-5 w-5 text-white" />
             </button>
           </div>
-        </div>
+        </div> */}
 
         <p className="signup-link mt-8 text-center text-sm text-gray-400">
           Don&apos;t have an account?{" "}
