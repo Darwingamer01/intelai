@@ -189,6 +189,8 @@ export default function SignIn() {
           style={{
             width: `${10 + i * 2 * 10 + 5}px`,
             height: `${10 + i * 2* 10 + 5}px`,
+            left: `${Math.random() * 100}%`,
+            top: `${Math.random() * 100}%`,
           }}
         />
       ))}
