@@ -5,6 +5,7 @@ import Link from "next/link"
 import { gsap } from "gsap"
 import { Menu, X, ShoppingCart, Zap } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { useRef } from "react"
 
 const navItems = [
   { name: "HOME", href: "/" },
@@ -18,17 +19,25 @@ export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
 
+  const navRef = useRef<HTMLDivElement>(null)
+
   useEffect(() => {
     // Animate navbar items on load
-    gsap.from(".nav-item", {
-      opacity: 0,
-      y: -20,
-      stagger: 0.1,
-      duration: 0.8,
-      ease: "power2.out",
-      delay: 0.2,
-    })
+    const ctx = gsap.context(() => {
+      gsap.from(".nav-item", {
+        opacity: 0,
+        y: -20,
+        stagger: 0.1,
+        duration: 0.8,
+        ease: "power2.out",
+        delay: 0.2,
+      })
+    }, navRef)
 
+    return () => ctx.revert() 
+  }, []);
+    
+  useEffect(() => {
     // Handle scroll effect
     const handleScroll = () => {
       if (window.scrollY > 50) {
@@ -43,7 +52,7 @@ export default function Navbar() {
   }, [])
 
   return (
-    <nav
+    <nav ref={navRef}
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         scrolled ? "bg-dark/90 backdrop-blur-md py-2" : "bg-transparent py-4"
       }`}

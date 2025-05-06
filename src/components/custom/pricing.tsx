@@ -69,15 +69,19 @@ export default function Pricing() {
 
       // Animate pricing cards
       gsap.from(".pricing-card", {
-        opacity: 0,
-        y: 50,
-        duration: 0.8,
-        stagger: 0.2,
+        opacity: 0.2,
+        y: 125,
+        duration: 0.3,
+        stagger: 0.1,
         scrollTrigger: {
           trigger: ".pricing-grid",
           start: "top 80%",
         },
       })
+
+      
+
+      
     }, pricingRef)
 
     return () => ctx.revert()

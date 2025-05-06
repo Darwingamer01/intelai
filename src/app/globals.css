@@ -147,6 +147,30 @@
 }
 
 
+@keyframes scatter {
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(var(--tx), var(--ty)) scale(0.8) rotate(var(--tr));
+  }
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+}
+
+@keyframes cosmic-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 20px 2px rgba(139, 92, 246, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 30px 5px rgba(139, 92, 246, 0.8);
+  }
+}
+
+
+
 
 
 

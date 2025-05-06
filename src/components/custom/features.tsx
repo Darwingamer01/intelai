@@ -46,26 +46,34 @@ export default function Features() {
 
     const ctx = gsap.context(() => {
       // Animate section title
-      gsap.from(".features-title", {
-        opacity: 0,
-        y: 50,
-        duration: 1,
+      const tl = gsap.timeline({
         scrollTrigger: {
           trigger: featuresRef.current,
           start: "top 80%",
+          toggleActions: "play none none none",
         },
       })
 
-      // Animate feature cards
-      gsap.from(".feature-card", {
+      tl.from(".features-title", {
         opacity: 0,
         y: 50,
-        duration: 0.8,
+        duration: 0.2,
+      })
+
+      // Animate feature cards
+      tl.from(".feature-card", {
+        opacity: 0,
+        y: 50,
+        duration: 0.3,
         stagger: 0.1,
-        scrollTrigger: {
-          trigger: ".features-grid",
-          start: "top 80%",
-        },
+      })
+
+      tl.to(".feature-card", {
+        opacity: 1,
+        y: +10,
+        duration: 0.1,
+        stagger: 0.4,
+        ease: "sine.out",
       })
     }, featuresRef)
 
