@@ -19,7 +19,7 @@ export function LoadingScreen({ message = "Loading..." }: LoadingScreenProps) {
         duration: 0.5,
         onComplete: () => setIsVisible(false),
       })
-    }, 2000)
+    }, 3000)
 
     return () => clearTimeout(timeout)
   }, [])

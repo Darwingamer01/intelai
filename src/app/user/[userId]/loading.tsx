@@ -1,5 +1,12 @@
 import { LoadingScreen } from "@/components/ui/loading-screen"
+import React from 'react'
 
-export default function UserLoading() {
-  return <LoadingScreen message="Loading user dashboard..." />
+const loading = () => {
+  return (
+    <LoadingScreen message="Loading user dashboard..." />
+  )
 }
+
+export default loading
+
+

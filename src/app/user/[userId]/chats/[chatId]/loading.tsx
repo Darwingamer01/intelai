@@ -1,5 +1,12 @@
 import { LoadingScreen } from "@/components/ui/loading-screen"
+import React from 'react'
 
-export default function ChatLoading() {
-  return <LoadingScreen message="Loading conversation..." />
+const loading = () => {
+  return (
+    <LoadingScreen message="Loading chat..." />
+  )
 }
+
+export default loading;
+
+
