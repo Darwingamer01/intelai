@@ -6,19 +6,20 @@ import { gsap } from "gsap"
 import { Menu, X, ShoppingCart, Zap } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useRef } from "react"
+import { useRouter } from "next/navigation"
 
 const navItems = [
   { name: "HOME", href: "/" },
-  { name: "SERVICES", href: "/services" },
-  { name: "BLOG", href: "/blog" },
-  { name: "PAGES", href: "/pages" },
-  { name: "CONTACT US", href: "/contact" },
+  { name: "FEATURES", href: "features"},
+  { name: "CONTACT US", href: "contact" },
+  {name: "PRICING", href: "pricing" },
+  {name: "EXPERIENCE AI", href: "/chat"},
 ]
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
-
+  const router = useRouter();
   const navRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -51,17 +52,26 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
 
+  const handleNavClick = (item: { name: string; href: string }) => {
+      if (item.href.startsWith("/")) {
+        router.push(item.href);
+      } else {
+        document.getElementById(item.href)?.scrollIntoView({ behavior: "smooth" });
+        setIsOpen(false); // Close the mobile menu after clicking
+      }
+    };
+
   return (
     <nav ref={navRef}
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         scrolled ? "bg-dark/90 backdrop-blur-md py-2" : "bg-transparent py-4"
       }`}
     >
-      <div className="container mx-auto px-4 flex justify-between items-center">
+      <div className="container mx-auto px-8 flex justify-between items-center ">
         {/* Logo */}
         <Link href="/" className="flex items-center">
           <span className="text-2xl font-bold bg-gradient-to-r from-purple-500 to-teal-400 bg-clip-text text-transparent">
-            AI<span className="text-white">CHAT</span>
+            Intel<span className="text-white">AI</span>
           </span>
         </Link>
 
@@ -69,38 +79,14 @@ export default function Navbar() {
         <div className="hidden md:flex items-center space-x-8">
           {navItems.map((item, index) => (
             <div key={index} className="relative group">
-              <button className="nav-item text-sm font-medium hover:text-purple-500 transition-colors flex items-center">
-                {item.name} <span className="ml-1">▼</span>
+              <button onClick={() => handleNavClick(item)} className="nav-item text-sm font-medium hover:text-purple-500  transition-colors flex items-center whitespace-nowrap">
+                {item.name} 
               </button>
-              <div className="absolute left-0 mt-2 w-48 rounded-md shadow-lg bg-gray-900 ring-1 ring-black ring-opacity-5 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300">
-                <div className="py-1">
-                  <Link href="#" className="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-800">
-                    Option 1
-                  </Link>
-                  <Link href="#" className="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-800">
-                    Option 2
-                  </Link>
-                  <Link href="#" className="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-800">
-                    Option 3
-                  </Link>
-                </div>
-              </div>
             </div>
           ))}
         </div>
 
-        {/* Cart and Join Button */}
-        <div className="hidden md:flex items-center space-x-4">
-          <Link href="/cart" className="nav-item relative">
-            <ShoppingCart className="h-6 w-6 text-white hover:text-purple-500 transition-colors" />
-            <span className="absolute -top-2 -right-2 bg-purple-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-              2
-            </span>
-          </Link>
-          <Button className="nav-item bg-purple-600 hover:bg-purple-700 text-white flex items-center gap-2">
-            Join Community <Zap className="h-4 w-4" />
-          </Button>
-        </div>
+        
 
         {/* Mobile Menu Button */}
         <div className="md:hidden flex items-center">
@@ -113,28 +99,17 @@ export default function Navbar() {
       {/* Mobile Menu */}
       {isOpen && (
         <div className="md:hidden bg-gray-900 py-4">
-          <div className="container mx-auto px-4 flex flex-col space-y-4">
+          <div className="container mx-auto px-4 flex flex-col items-start space-y-4">
             {navItems.map((item, index) => (
-              <Link
+              <button
                 key={index}
-                href={item.href}
                 className="text-white hover:text-purple-500 py-2"
-                onClick={() => setIsOpen(false)}
+                onClick={() => handleNavClick(item)}
               >
                 {item.name}
-              </Link>
+              </button>
             ))}
-            <div className="flex items-center justify-between pt-4 border-t border-gray-800">
-              <Link href="/cart" className="relative">
-                <ShoppingCart className="h-6 w-6 text-white" />
-                <span className="absolute -top-2 -right-2 bg-purple-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                  2
-                </span>
-              </Link>
-              <Button className="bg-purple-600 hover:bg-purple-700 text-white flex items-center gap-2">
-                Join Community <Zap className="h-4 w-4" />
-              </Button>
-            </div>
+            
           </div>
         </div>
       )}

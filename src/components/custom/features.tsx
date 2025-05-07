@@ -81,7 +81,7 @@ export default function Features() {
   }, [])
 
   return (
-    <section ref={featuresRef} className="py-20 bg-gray-900">
+    <section ref={featuresRef} id="features" className="py-20 bg-gray-900">
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
           <h2 className="features-title text-3xl md:text-4xl font-bold mb-6">

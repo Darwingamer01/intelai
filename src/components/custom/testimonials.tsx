@@ -87,7 +87,7 @@ export default function Testimonials() {
   }, [currentSlide])
 
   return (
-    <section ref={testimonialsRef} className="py-20 bg-dark">
+    <section ref={testimonialsRef} id="testimonials" className="py-20 bg-dark">
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
           <h2 className="testimonials-title text-3xl md:text-4xl font-bold mb-6">

@@ -41,6 +41,20 @@ export default function ChatPage({ params }: PageProps) {
   const fileInputRef = useRef<HTMLInputElement>(null)
   const chatContainerRef = useRef<HTMLDivElement>(null)
 
+
+  const [message, setMessage] = useState("");
+  const token = localStorage.getItem("authToken") || ""
+
+  useEffect(()=>{
+    const fetchMessage = async () => {
+      try {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/message/${chatId}`,{token});
+      } catch (error) {
+        
+      }
+    }  
+  })
+
   // Initialize with welcome message based on chat type
   useEffect(() => {
     let welcomeMessage = "Hi there! How can I assist you today?"

@@ -6,6 +6,7 @@ import { gsap } from "gsap"
 import { Button } from "@/components/ui/button"
 import { MessageSquare, ArrowRight } from "lucide-react"
 import dynamic from "next/dynamic";
+import Link from "next/link"
 
 
 const ModelViewer = dynamic(() => import('@/components/model/model'), { ssr: false });
@@ -107,11 +108,17 @@ export default function Hero() {
 
           <div className="hero-buttons flex flex-col sm:flex-row gap-4">
             <Button className="bg-purple-600 hover:bg-purple-700 text-white px-8 py-6 text-lg flex items-center gap-2 h-auto">
-              Start Chatting <MessageSquare className="h-5 w-5" />
+              <Link href="/sign-in">
+                Start Chatting <MessageSquare className="h-5 w-5" />
+              </Link>
             </Button>
             <Button
               variant="outline"
               className="border-white/20 text-white hover:bg-white/10 px-8 py-6 text-lg flex items-center gap-2 h-auto"
+              onClick={() => {
+                document.getElementById("features")?.scrollIntoView({
+                  behavior: "smooth"});
+                }}
             >
               Learn More <ArrowRight className="h-5 w-5" />
             </Button>
