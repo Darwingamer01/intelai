@@ -190,11 +190,13 @@ export default function SignUp() {
       setIsLoading(true)
       // Simulate API call
       // await new Promise((resolve) => setTimeout(resolve, 1500))
-      const response = await axios.post("/api/auth/signup", {
+      console.log(formData);
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/signup`, {
         name: formData.name,
         email: formData.email,
         password: formData.password,
       });
+      console.log(response.data);
   
       // Save the token in localStorage
       const { token } = response.data;

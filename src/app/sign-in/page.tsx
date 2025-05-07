@@ -167,14 +167,10 @@ export default function SignIn() {
 
     try {
       setIsLoading(true)
-      // Simulate API call
-      // await new Promise((resolve) => setTimeout(resolve, 1500))
-      const response = await axios.post("/api/auth/signin", {
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/login`, {
         email,
         password,
       });
-  
-      // Save the token in localStorage
       const { token } = response.data;
       localStorage.setItem("authToken", token);
       router.push("/")
