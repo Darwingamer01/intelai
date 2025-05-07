@@ -9,6 +9,7 @@ import { gsap } from "gsap"
 import { User, Mail, Lock, ArrowRight, Check, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import axios from "axios";
 
 export default function SignUp() {
   const [formData, setFormData] = useState({
@@ -188,8 +189,17 @@ export default function SignUp() {
     try {
       setIsLoading(true)
       // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1500))
-      router.push("/")
+      // await new Promise((resolve) => setTimeout(resolve, 1500))
+      const response = await axios.post("/api/auth/signup", {
+        name: formData.name,
+        email: formData.email,
+        password: formData.password,
+      });
+  
+      // Save the token in localStorage
+      const { token } = response.data;
+      localStorage.setItem("authToken", token);
+      router.push("/sign-in")
     } catch (err) {
       setError("An error occurred during sign up")
     } finally {

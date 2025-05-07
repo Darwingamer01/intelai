@@ -9,6 +9,7 @@ import { gsap } from "gsap"
 import { Mail, Lock, ArrowRight, Github, Facebook, Twitter } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import axios from "axios";
 
 export default function SignIn() {
   const [email, setEmail] = useState("")
@@ -167,7 +168,15 @@ export default function SignIn() {
     try {
       setIsLoading(true)
       // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1500))
+      // await new Promise((resolve) => setTimeout(resolve, 1500))
+      const response = await axios.post("/api/auth/signin", {
+        email,
+        password,
+      });
+  
+      // Save the token in localStorage
+      const { token } = response.data;
+      localStorage.setItem("authToken", token);
       router.push("/")
     } catch (err) {
       setError("Invalid email or password")
