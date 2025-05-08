@@ -48,9 +48,9 @@ export default function ChatPage({ params }: PageProps) {
   useEffect(()=>{
     const fetchMessage = async () => {
       try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/message/${chatId}`,{token});
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/message/${chatId}`);
       } catch (error) {
-        
+        console.log("Error fetching message:", error);
       }
     }  
   })
