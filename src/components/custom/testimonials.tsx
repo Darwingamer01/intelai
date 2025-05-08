@@ -10,7 +10,7 @@ const testimonials = [
   {
     name: "Sarah Johnson",
     role: "Content Creator",
-    image: "/placeholder.svg?height=80&width=80",
+    image: "/testimonials/Sarah.jpg",
     content:
       "This AI chat platform has completely transformed my workflow. The responses are incredibly helpful and save me hours of research time.",
     rating: 5,
@@ -18,7 +18,7 @@ const testimonials = [
   {
     name: "Michael Chen",
     role: "Software Developer",
-    image: "/placeholder.svg?height=80&width=80",
+    image: "/testimonials/Michael.jpg",
     content:
       "I use the code generation feature daily. It helps me solve complex problems and explains the solutions in a way that's easy to understand.",
     rating: 5,
@@ -26,15 +26,15 @@ const testimonials = [
   {
     name: "Emily Rodriguez",
     role: "Marketing Manager",
-    image: "/placeholder.svg?height=80&width=80",
+    image: "/testimonials/Emily.jpg",
     content:
       "The creative assistant has been a game-changer for our marketing campaigns. It generates fresh ideas when we're stuck and helps us refine our messaging.",
     rating: 4,
   },
   {
-    name: "David Kim",
+    name: "Daljit Singh",
     role: "Student",
-    image: "/placeholder.svg?height=80&width=80",
+    image: "/testimonials/Daljit.jpg",
     content:
       "As a student, this AI chat has been invaluable for explaining complex concepts and helping me study more effectively.",
     rating: 5,

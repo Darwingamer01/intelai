@@ -77,12 +77,7 @@ export default function Pricing() {
           trigger: ".pricing-grid",
           start: "top 80%",
         },
-      })
-
-      
-
-      
-    }, pricingRef)
+      })}, pricingRef)
 
     return () => ctx.revert()
   }, [])
