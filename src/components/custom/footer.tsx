@@ -49,20 +49,6 @@ export default function Footer() {
               Experience the future of conversation with our advanced AI chat platform. Get intelligent responses,
               creative content, and helpful solutions.
             </p>
-            <div className="flex space-x-4">
-              <a href="#" className="text-gray-400 hover:text-purple-500 transition-colors">
-                <Twitter className="h-5 w-5" />
-              </a>
-              <a href="#" className="text-gray-400 hover:text-purple-500 transition-colors">
-                <Instagram className="h-5 w-5" />
-              </a>
-              <a href="#" className="text-gray-400 hover:text-purple-500 transition-colors">
-                <Linkedin className="h-5 w-5" />
-              </a>
-              <a href="#" className="text-gray-400 hover:text-purple-500 transition-colors">
-                <Github className="h-5 w-5" />
-              </a>
-            </div>
           </div>
 
           {/* Quick Links */}
@@ -99,20 +85,32 @@ export default function Footer() {
 
           {/* Contact Info */}
           <div className="footer-column">
-            <h3 className="text-xl font-bold mb-6">Contact Us</h3>
+            <h3 className="text-xl font-bold mb-6">Contact Dev</h3>
             <ul className="space-y-4">
               <li className="flex items-start">
                 <MapPin className="h-5 w-5 text-purple-500 mr-3 mt-1" />
-                <span className="text-gray-400">123 AI Street, Tech City, TC 12345</span>
-              </li>
-              <li className="flex items-center">
-                <Phone className="h-5 w-5 text-purple-500 mr-3" />
-                <span className="text-gray-400">+1 (555) 123-4567</span>
+                <a href="https://3d-portfolio-seven-xi.vercel.app/" className="text-gray-400">Portfolio</a>
               </li>
               <li className="flex items-center">
                 <Mail className="h-5 w-5 text-purple-500 mr-3" />
-                <span className="text-gray-400">info@aichat.com</span>
+                <a href="mailto:siserinsevoc@gmail.com" className="text-gray-400 hover:text-purple-500 transition-colors">
+                  siserinsevoc@gmail.com
+                </a>
               </li>
+              <div className="flex space-x-4">
+                <a href="https://x.com/PratapSiser" className="text-gray-400 hover:text-purple-500 transition-colors">
+                  <Twitter className="h-5 w-5" />
+                </a>
+                <a href="https://www.instagram.com/siser_ins17/" className="text-gray-400 hover:text-purple-500 transition-colors">
+                  <Instagram className="h-5 w-5" />
+                </a>
+                <a href="https://www.linkedin.com/in/siser" className="text-gray-400 hover:text-purple-500 transition-colors">
+                  <Linkedin className="h-5 w-5" />
+                </a>
+                <a href="https://github.com/Siser-Pratap" className="text-gray-400 hover:text-purple-500 transition-colors">
+                  <Github className="h-5 w-5" />
+                </a>
+            </div>
             </ul>
           </div>
 
@@ -131,9 +129,8 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* Copyright */}
         <div className="border-t border-gray-800 pt-8 mt-8 text-center">
-          <p className="text-gray-500">© {new Date().getFullYear()} AICHAT. All rights reserved.</p>
+          <p className="text-gray-500">© {new Date().getFullYear()} Siser Pratap. All rights reserved.</p>
         </div>
       </div>
     </footer>
