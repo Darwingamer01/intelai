@@ -5,6 +5,7 @@ import { gsap } from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
 import { Check, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import Link from "next/link"
 
 const plans = [
   {
@@ -56,28 +57,38 @@ export default function Pricing() {
     gsap.registerPlugin(ScrollTrigger)
 
     const ctx = gsap.context(() => {
-      // Animate section title
-      gsap.from(".pricing-title", {
-        opacity: 0,
-        y: 50,
-        duration: 1,
+      const tl = gsap.timeline({
         scrollTrigger: {
           trigger: pricingRef.current,
           start: "top 80%",
+          toggleActions: "play none none none",
         },
       })
 
-      // Animate pricing cards
-      gsap.from(".pricing-card", {
-        opacity: 0.2,
-        y: 125,
-        duration: 0.3,
+      tl.from(".pricing-title", {
+        opacity: 0,
+        y: 50,
+        duration: 0.5,
+      })
+      tl.from('.pricing-card', {
+        opacity: 0,
+        y: 50,
+        duration: 0.1,
         stagger: 0.1,
-        scrollTrigger: {
-          trigger: ".pricing-grid",
-          start: "top 80%",
-        },
-      })}, pricingRef)
+      })
+      tl.to(".pricing-card", {
+        opacity: 1,
+        y:0,
+        duration:0.1,
+        stagger: 0.4,
+        ease: "sine.out",
+      })
+      tl.to(".popular", {
+        top:-12,
+        duration:0.1,
+        ease: "sine.out",
+      })
+    }, pricingRef)
 
     return () => ctx.revert()
   }, [])
@@ -100,7 +111,7 @@ export default function Pricing() {
           {plans.map((plan, index) => (
             <div
               key={index}
-              className={`pricing-card relative bg-gray-800 border rounded-xl p-8 transition-all duration-300 ${
+              className={`pricing-card ${plan.popular?"popular":""} relative bg-gray-800 border rounded-xl p-8 transition-all duration-300 ${
                 plan.popular
                   ? "border-purple-500 shadow-lg shadow-purple-500/20 transform md:-translate-y-4"
                   : "border-gray-700 hover:border-purple-500/50"
@@ -141,7 +152,9 @@ export default function Pricing() {
                     : "bg-gray-700 hover:bg-gray-600 text-white"
                 }`}
               >
-                Get Started
+                <Link href="/chats">
+                  Get Started
+                </Link>
               </Button>
             </div>
           ))}

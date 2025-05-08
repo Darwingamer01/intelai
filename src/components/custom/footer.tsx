@@ -29,6 +29,11 @@ export default function Footer() {
     return () => ctx.revert()
   }, [])
 
+
+  const scroll = (id: string) => {
+    document.getElementById(id)?.scrollIntoView({behavior: 'smooth'});
+  }
+
   return (
     <footer ref={footerRef} id="contact" className="bg-gray-900 pt-16 pb-8">
       <div className="container mx-auto px-4">
@@ -37,7 +42,7 @@ export default function Footer() {
           <div className="footer-column">
             <h3 className="text-xl font-bold mb-6">
               <span className="bg-gradient-to-r from-purple-500 to-teal-400 bg-clip-text text-transparent">
-                AI<span className="text-white">CHAT</span>
+                Intel<span className="text-white">AI</span>
               </span>
             </h3>
             <p className="text-gray-400 mb-6">
@@ -45,9 +50,6 @@ export default function Footer() {
               creative content, and helpful solutions.
             </p>
             <div className="flex space-x-4">
-              <a href="#" className="text-gray-400 hover:text-purple-500 transition-colors">
-                <Facebook className="h-5 w-5" />
-              </a>
               <a href="#" className="text-gray-400 hover:text-purple-500 transition-colors">
                 <Twitter className="h-5 w-5" />
               </a>
@@ -73,24 +75,24 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/about" className="text-gray-400 hover:text-purple-500 transition-colors">
-                  About Us
+                <button onClick={()=>{scroll("features")}} className="text-gray-400 hover:text-purple-500 transition-colors">
+                  Features
+                </button>
+              </li>
+              <li>
+                <Link href="/chats" className="text-gray-400 hover:text-purple-500 transition-colors">
+                  Experience AI
                 </Link>
               </li>
               <li>
-                <Link href="/services" className="text-gray-400 hover:text-purple-500 transition-colors">
-                  Services
-                </Link>
+                <button onClick={()=>{scroll('pricing')}} className="text-gray-400 hover:text-purple-500 transition-colors">
+                  Pricing
+                </button>
               </li>
               <li>
-                <Link href="/blog" className="text-gray-400 hover:text-purple-500 transition-colors">
-                  Blog
-                </Link>
-              </li>
-              <li>
-                <Link href="/contact" className="text-gray-400 hover:text-purple-500 transition-colors">
-                  Contact
-                </Link>
+                <button onClick={()=>{scroll('testimonials')}}  className="text-gray-400 hover:text-purple-500 transition-colors">
+                  Testimonials
+                </button>
               </li>
             </ul>
           </div>
