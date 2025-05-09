@@ -8,11 +8,14 @@ import Image from "next/image"
 import { gsap } from "gsap"
 import { Send, Paperclip, Mic, Bot, User, Sparkles, X, Loader2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import axios from "axios";
+
 import { Container } from "postcss"
+import { mainText } from "@/lib/gemini"
+import { stringify } from "querystring"
 
 interface PageProps {
   params: {
-    userId: string
     chatId: string
   }
 }
@@ -27,9 +30,9 @@ interface Message {
 }
 
 export default function ChatPage({ params }: PageProps) {
-  const { userId, chatId } = params
+  const { chatId } = params;
   const router = useRouter()
-  const searchParams = useSearchParams()
+  const searchParams = useSearchParams();
   const chatType = searchParams.get("type") || "general"
 
   const [messages, setMessages] = useState<Message[]>([])
@@ -41,19 +44,46 @@ export default function ChatPage({ params }: PageProps) {
   const fileInputRef = useRef<HTMLInputElement>(null)
   const chatContainerRef = useRef<HTMLDivElement>(null)
 
+  interface Chat {
+    _id: string,
+    role: "user" | "assistant";
+    messages: string;
+    images: string;
+  }
+  
+  const [chats, setchats] = useState<Chat[]>([]);
 
-  const [message, setMessage] = useState("");
-  const token = localStorage.getItem("authToken") || ""
+  
+    
+  
+  
 
-  useEffect(()=>{
-    const fetchMessage = async () => {
-      try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/message/${chatId}`);
-      } catch (error) {
-        console.log("Error fetching message:", error);
-      }
-    }  
-  })
+  // const getChats = async () => {
+  //   const availableChats = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/chats/${chatId}`);
+  //   setchats(availableChats.data.chats);
+  // }
+
+  // let i=1;
+  // while(i){
+  //   getChats();
+  //   i--;
+  // }
+  // console.log(chats);
+  
+
+  
+  
+  
+
+  
+
+  
+
+  
+    
+      
+    
+
 
   // Initialize with welcome message based on chat type
   useEffect(() => {

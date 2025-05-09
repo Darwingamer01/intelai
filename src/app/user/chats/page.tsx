@@ -6,6 +6,10 @@ import { useEffect, useRef } from "react"
 import { useRouter } from "next/navigation"
 import { gsap } from "gsap"
 import { MessageSquare, ImageIcon, Code, Sparkles, Zap } from "lucide-react"
+import { main, mainText } from "@/lib/gemini"
+import axios, { AxiosHeaders } from "axios";
+import { headers } from "next/headers"
+
 
 interface PageProps {
   params: {
@@ -18,6 +22,7 @@ export default function ChatsPage({ params }: PageProps) {
   const router = useRouter()
   const containerRef = useRef<HTMLDivElement>(null)
 
+  
   useEffect(() => {
     if (!containerRef.current) return
 
@@ -94,21 +99,39 @@ export default function ChatsPage({ params }: PageProps) {
     const chatId = `new-${Date.now()}`
     router.push(`/user/${userId}/chats/${chatId}?type=${type}`)
   }
-
-  const handleInputSubmit = (e: React.FormEvent) => {
+  
+  const handleInputSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    const chatId = `new-${Date.now()}`
-    router.push(`/user/${userId}/chats/${chatId}`)
+    const input = e.currentTarget.querySelector("input") as HTMLInputElement;
+    const text = input.value;
+    const data = {role:"user", message: text, images: ""};
+    const answer= await mainText(text);
+    console.log(answer);
+    const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/chats/`, data, {
+      headers:{
+        Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+      }
+    });
+    console.log(response.data);
+    const chatId = response.data.chatId;
+    const newData = {role:"assistant", message: answer, images:""};
+    const newResponse = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/chats/${chatId}`, newData, {
+      headers:{
+        Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+      }
+    })
+    console.log(newResponse.data);
+    router.push(`/user/chats/${chatId}`)
   }
+
+  
+  
+  
+
+
 
   return (
     <div ref={containerRef} className="h-full flex flex-col items-center justify-center p-6 relative overflow-hidden">
-      {/* Animated background gradient */}
-      {/* <div className="bg-gradient absolute inset-0 opacity-10 pointer-events-none">
-        <div className="absolute inset-0 bg-gradient-to-br from-purple-600/20 via-transparent to-teal-400/20 rounded-full transform scale-150"></div>
-      </div> */}
-
-      {/* Particles */}
       {[...Array(7)].map((_, i) => (
         <div
           key={i}

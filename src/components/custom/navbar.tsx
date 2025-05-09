@@ -214,14 +214,12 @@ export default function Navbar() {
           ))}
         </div>
 
-        <div className="flex container justify-end p-4">
+        <div className="flex relative container justify-end p-4">
           <Button onClick={()=>{
             setIsOpen(false)
-          }} className="text-white border-white hover:bg-purple-500 hover:text-white transition-colors">
+          }} className="text-white border-white hover:text-purple-500 transition-colors">
             <X className="mr-2" /> 
-          </Button>
-
-        </div>
+          </Button></div>
 
         <div className="container mx-auto px-4 h-full flex flex-col justify-center">
           <div ref={menuItemsRef} className="space-y-8">
