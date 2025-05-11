@@ -9,6 +9,7 @@ import { MessageSquare, ImageIcon, Code, Sparkles, Zap } from "lucide-react"
 import { main, mainText } from "@/lib/gemini"
 import axios, { AxiosHeaders } from "axios";
 import { headers } from "next/headers"
+import { useState } from "react"
 
 
 interface PageProps {
@@ -21,6 +22,7 @@ export default function ChatsPage({ params }: PageProps) {
   const { userId } = params
   const router = useRouter()
   const containerRef = useRef<HTMLDivElement>(null)
+  const [userChats, setuserChats] = useState([]);
 
   
   useEffect(() => {
@@ -102,8 +104,7 @@ export default function ChatsPage({ params }: PageProps) {
   
   const handleInputSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    const input = e.currentTarget.querySelector("input") as HTMLInputElement;
-    const text = input.value;
+    const text = input;
     const data = {role:"user", message: text, images: ""};
     const answer= await mainText(text);
     console.log(answer);
@@ -121,6 +122,13 @@ export default function ChatsPage({ params }: PageProps) {
       }
     })
     console.log(newResponse.data);
+    const addChat = {chatId: chatId, message: text};
+    const addChatId = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/userChats`, addChat, {
+      headers:{
+        Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+      }
+    })
+    console.log(addChatId.data);
     router.push(`/user/chats/${chatId}`)
   }
 

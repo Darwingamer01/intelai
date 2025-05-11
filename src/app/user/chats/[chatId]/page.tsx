@@ -9,6 +9,9 @@ import { gsap } from "gsap"
 import { Send, Paperclip, Mic, Bot, User, Sparkles, X, Loader2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import axios from "axios";
+import {use} from 'react';
+import { useParams } from "next/navigation"
+
 
 import { Container } from "postcss"
 import { mainText } from "@/lib/gemini"
@@ -29,11 +32,14 @@ interface Message {
   image?: string
 }
 
+const token = localStorage.getItem("authToken");
+
 export default function ChatPage({ params }: PageProps) {
   const { chatId } = params;
   const router = useRouter()
   const searchParams = useSearchParams();
   const chatType = searchParams.get("type") || "general"
+  
 
   const [messages, setMessages] = useState<Message[]>([])
   const [input, setInput] = useState("")
@@ -53,41 +59,24 @@ export default function ChatPage({ params }: PageProps) {
   
   const [chats, setchats] = useState<Chat[]>([]);
 
-  
-    
-  
-  
+  const getChats = async () => {
+    const availableChats = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/chats/${chatId}`);
+    setchats(availableChats.data.chats);
+  }
 
-  // const getChats = async () => {
-  //   const availableChats = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/chats/${chatId}`);
-  //   setchats(availableChats.data.chats);
-  // }
 
-  // let i=1;
-  // while(i){
-  //   getChats();
-  //   i--;
-  // }
-  // console.log(chats);
-  
+  getChats();
 
-  
-  
-  
+  const id = params.chatId;
 
   
 
   
-
-  
-    
-      
-    
-
-
-  // Initialize with welcome message based on chat type
   useEffect(() => {
     let welcomeMessage = "Hi there! How can I assist you today?"
+    
+    
+    
 
     if (chatType === "image") {
       welcomeMessage = "Upload an image, and I'll analyze it for you."
@@ -179,6 +168,9 @@ export default function ChatPage({ params }: PageProps) {
 
 return ctx.revert();
 }, [])
+
+
+  
     
 
  
@@ -188,18 +180,30 @@ return ctx.revert();
   }
 
   const handleSendMessage = async (e: React.FormEvent) => {
-    e.preventDefault()
+    e.preventDefault();
+    const text = input;
+    const data = {role: "user", message: text, image:""};
+    const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/chats/${id}`, data, {
+      headers:{
+        Authorization: `Bearer ${token}`
+      }
+    });
+
+    if(response.data.status!==201){
+      console.log(response.data.message);
+    }
 
     if (!input.trim() && !imagePreview) return
 
-    // Add user message
     const userMessage: Message = {
       id: Date.now().toString(),
       role: "user",
-      content: input,
+      content: text,
       timestamp: new Date(),
       image: imagePreview || undefined,
     }
+
+    
 
     setMessages((prev) => [...prev, userMessage])
     setInput("")
@@ -208,18 +212,30 @@ return ctx.revert();
 
     // Simulate AI response
     setIsLoading(true)
+    
 
     // Fake typing delay
-    setTimeout(() => {
+    setTimeout(async() => {
       const assistantMessage: Message = {
         id: (Date.now() + 1).toString(),
         role: "assistant",
-        content: getAIResponse(input, imagePreview),
+        content: (await mainText(text)) || "",
         timestamp: new Date(),
       }
 
       setMessages((prev) => [...prev, assistantMessage])
+      
+      const newData = {role:"assistant", message:assistantMessage.content, image:""};
+      const answerResponse  = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/chats/${id}`, newData, {
+        headers:{
+          Authorization: `Bearer ${token}`
+        }
+      });
+      if(answerResponse.data.status!==201){
+        console.log(answerResponse.data.message);
+      };
       setIsLoading(false)
+      console.log(messages);
     }, 1500)
   }
 
