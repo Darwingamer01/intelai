@@ -14,7 +14,7 @@ import { useParams } from "next/navigation"
 
 
 import { Container } from "postcss"
-import { mainText } from "@/lib/gemini"
+import { mainText, multiMain } from "@/lib/gemini"
 import { stringify } from "querystring"
 
 interface PageProps {
@@ -32,6 +32,13 @@ interface Message {
   image?: string
 }
 
+interface historyProps {
+  history: Array<{
+    role: "user" | "model";
+    parts: [{text:string}];
+  }>;
+}
+
 const token = localStorage.getItem("authToken");
 
 export default function ChatPage({ params }: PageProps) {
@@ -41,7 +48,7 @@ export default function ChatPage({ params }: PageProps) {
   const chatType = searchParams.get("type") || "general"
   
 
-  const [messages, setMessages] = useState<Message[]>([])
+  const [messages, setMessages] = useState<any[]>([])
   const [input, setInput] = useState("")
   const [isLoading, setIsLoading] = useState(false)
   const [showImageUpload, setShowImageUpload] = useState(false)
@@ -56,18 +63,40 @@ export default function ChatPage({ params }: PageProps) {
     messages: string;
     images: string;
   }
-  
-  const [chats, setchats] = useState<Chat[]>([]);
-
-  const getChats = async () => {
-    const availableChats = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/chats/${chatId}`);
-    setchats(availableChats.data.chats);
-  }
-
-
-  getChats();
 
   const id = params.chatId;
+
+  useEffect(() => {
+    // Fetch chat data from the backend API
+    const fetchChatData = async () => {
+      try {
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/chats/${id}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+         const formattedChats = response.data.chats.map((chat: any) => ({
+            id: chat._id, // Map `_id` to `id`
+            role: chat.role,
+            content: chat.messages,
+            timestamp: chat.date, // Convert timestamp to Date object
+            image: chat.images || null, // Handle optional images
+          }));
+
+        setMessages(formattedChats);
+        console.log(messages, "messages");
+        
+        
+      } catch (error) {
+        console.error("Error fetching chat data:", error);
+      } finally {
+        setIsLoading(false);
+        
+      }
+    };
+
+    fetchChatData();
+  }, [id]);
 
   
 
@@ -170,6 +199,10 @@ return ctx.revert();
 }, [])
 
 
+  useEffect(()=>{
+    console.log(messages);
+  }, [messages]);
+
   
     
 
@@ -182,17 +215,7 @@ return ctx.revert();
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
     const text = input;
-    const data = {role: "user", message: text, image:""};
-    const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/chats/${id}`, data, {
-      headers:{
-        Authorization: `Bearer ${token}`
-      }
-    });
-
-    if(response.data.status!==201){
-      console.log(response.data.message);
-    }
-
+    
     if (!input.trim() && !imagePreview) return
 
     const userMessage: Message = {
@@ -203,7 +226,16 @@ return ctx.revert();
       image: imagePreview || undefined,
     }
 
-    
+    const data = {role: "user", message: text, image:"", date: new Date().toISOString()};
+    const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/chats/${id}`, data, {
+      headers:{
+        Authorization: `Bearer ${token}`
+      }
+    });
+
+    if(response.data.status!==201){
+      console.log(response.data.message);
+    }
 
     setMessages((prev) => [...prev, userMessage])
     setInput("")
@@ -212,20 +244,28 @@ return ctx.revert();
 
     // Simulate AI response
     setIsLoading(true)
+
+    const transformMessagesToHistory = (message: any[]): historyProps["history"] =>{
+        return messages.map((message)=>({
+          role:message.role==="assistant"?"model":"user",
+          parts: [{text: message.content}],
+        }));
+    };
+    
+    const history = transformMessagesToHistory(messages);
     
 
-    // Fake typing delay
     setTimeout(async() => {
       const assistantMessage: Message = {
         id: (Date.now() + 1).toString(),
         role: "assistant",
-        content: (await mainText(text)) || "",
+        content: (await multiMain({history}, text)) || "",
         timestamp: new Date(),
       }
 
       setMessages((prev) => [...prev, assistantMessage])
       
-      const newData = {role:"assistant", message:assistantMessage.content, image:""};
+      const newData = {role:"assistant", message:assistantMessage.content, image:"", date: new Date().toISOString()};
       const answerResponse  = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/chats/${id}`, newData, {
         headers:{
           Authorization: `Bearer ${token}`
@@ -329,7 +369,7 @@ return ctx.revert();
                 </div>
                 <span className="text-xs opacity-75">
                   {message.role === "user" ? "You" : "AI Assistant"} •{" "}
-                  {message.timestamp.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+                  {new Date(message.timestamp).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
                 </span>
               </div>
 

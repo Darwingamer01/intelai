@@ -104,8 +104,9 @@ export default function ChatsPage({ params }: PageProps) {
   
   const handleInputSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    const text = input;
-    const data = {role:"user", message: text, images: ""};
+    const input = e.currentTarget.querySelector("input") as HTMLInputElement;
+    const text = input.value;
+    const data = {role: "user", message: text, images: "", date: new Date().toISOString()};
     const answer= await mainText(text);
     console.log(answer);
     const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/chats/`, data, {
@@ -115,14 +116,14 @@ export default function ChatsPage({ params }: PageProps) {
     });
     console.log(response.data);
     const chatId = response.data.chatId;
-    const newData = {role:"assistant", message: answer, images:""};
+    const newData = {role:"assistant", message: answer, images:"", date: new Date().toISOString()};
     const newResponse = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/chats/${chatId}`, newData, {
       headers:{
         Authorization: `Bearer ${localStorage.getItem("authToken")}`,
       }
     })
     console.log(newResponse.data);
-    const addChat = {chatId: chatId, message: text};
+    const addChat = {chatId: chatId, message: text, date: new Date().toISOString()};
     const addChatId = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/userChats`, addChat, {
       headers:{
         Authorization: `Bearer ${localStorage.getItem("authToken")}`,

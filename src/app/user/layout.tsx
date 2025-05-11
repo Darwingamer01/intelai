@@ -117,7 +117,7 @@ export default function UserLayout({ children, params }: LayoutProps) {
           {/* Main navigation */}
           <div className="p-4 flex-1 overflow-y-auto">
             <Link
-              href={`/user/${userId}/chats`}
+              href={`/user/chats`}
               className={`sidebar-item flex items-center p-3 mb-2 rounded-lg transition-colors ${
                 pathname === `/user/${userId}/chats`
                   ? "bg-purple-600/20 text-purple-400 border border-purple-600/30"
@@ -141,7 +141,7 @@ export default function UserLayout({ children, params }: LayoutProps) {
             </Link>
 
             <Link
-              href={`/user/${userId}/profile`}
+              href={`/user/profile`}
               className={`sidebar-item flex items-center p-3 mb-2 rounded-lg transition-colors ${
                 pathname.includes("/profile")
                   ? "bg-purple-600/20 text-purple-400 border border-purple-600/30"
