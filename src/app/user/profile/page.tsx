@@ -24,32 +24,106 @@ import {
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import uploadImage from "@/components/upload/imageUpload"
+import Loader from "@/components/loader/loader"
+import axios from "axios"
+
+
+const filePath = '/path/to/local/image.jpg';
 
 
 
 
-// Mock user data
-const userData = {
-  name: "Alex Johnson",
-  email: "alex.johnson@example.com",
-  phone: "+1 (555) 123-4567",
-  location: "San Francisco, CA",
-  joinDate: "January 2023",
-  avatar: "/placeholder.svg?height=200&width=200",
-  bio: "AI enthusiast and tech lover. I enjoy exploring the latest advancements in artificial intelligence and machine learning.",
+interface profileData{
+  name: string,
+  email: string, 
+  phone: string,
+  location: string,
+  date: Date,
+  avatar: string,
+  bio: string, 
 }
+
+interface chatsData{
+  _id: string,
+  message: string,
+  date: Date,
+};
 
 export default function Profile() {
   const [isEditing, setIsEditing] = useState(false)
-  const [formData, setFormData] = useState({
-    name: userData.name,
-    email: userData.email,
-    phone: userData.phone,
-    location: userData.location,
-    bio: userData.bio,
-  })
+  const [formData, setFormData] = useState<profileData>({
+    name: "",
+    email: "",
+    phone: "",
+    location: "",
+    date: new Date(),
+    avatar: "",
+    bio: "",
+  });
+  const [existing, setexisting] = useState("put");
+
+  const [chats, setchats] = useState<chatsData[]>([]);
+  const [messagecount, setmessagecount] = useState(0);
+
+  const [avatar, setavatar] = useState(false);
+  const [isloading, setisloading] = useState(false);
   const [activeTab, setActiveTab] = useState("profile")
   const profileRef = useRef<HTMLDivElement>(null)
+  const token = localStorage.getItem('authToken');
+  console.log(token, 'token');
+
+  const getProfileData = async()=>{
+    setisloading(true);
+    try {
+      const res = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/userProfile`, {
+        headers:{
+          Authorization: `Bearer ${token}`
+        }
+      });
+      if(res.data===null){
+        setIsEditing(true);
+        setexisting("post");
+        return;
+      }
+      const profileData = res.data;
+      setFormData(profileData);
+      console.log(formData);
+    } catch (error:any) {
+      console.log(error);
+      console.log(error.message);
+    }
+    finally{
+      setisloading(false);
+    }
+  }
+
+  const getUserChats = async() =>{
+    setisloading(true);
+    try {
+      const userChats = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/userChats`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      console.log(userChats);
+      console.log(userChats.data);
+      setchats(userChats.data.chats);
+      setmessagecount(userChats.data.messageCount);
+
+    } catch (error:any) {
+      console.log(error);
+      console.log(error.message);
+    }finally{
+      setisloading(false);
+    }
+    
+  };
+  
+  useEffect(() => {
+  getProfileData();
+  getUserChats();
+}, []);
 
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger)
@@ -145,19 +219,73 @@ export default function Profile() {
     setFormData((prev) => ({ ...prev, [name]: value }))
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    // Here you would typically send the updated data to your API
-    setIsEditing(false)
-    // For demo purposes, we're not actually updating the userData
+  const handleAvatarChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const file = e.target.files?.[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("upload_preset", "IntelAi"); 
+    const res = await fetch("https://api.cloudinary.com/v1_1/di4jbsdwo/image/upload", {
+      method: "POST",
+      body: formData,
+    });
+    const data = await res.json();
+    if (data.secure_url) {
+      setFormData((prev) => ({ ...prev, avatar: data.secure_url }));
+    }
+    setavatar(true);
   }
+};
+
+  const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+  setisloading(true);
+  try {
+    let res;
+    if (existing === "put") {
+      res = await axios.put(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/userProfile`,
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+    } else {
+      res = await axios.post(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/userProfile`,
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+    }
+    if (res.status === 201) {
+      setIsEditing(false);
+    }
+  } catch (error: any) {
+    console.log(error.message);
+    alert("Something occurred");
+  } finally {
+    setisloading(false);
+  }
+};
 
   const handleTabChange = (value: string) => {
     setActiveTab(value)
   }
 
+  
+
   return (
-    <div ref={profileRef} className="min-h-screen bg-gray-900 py-12 px-4 sm:px-6 lg:px-8 relative overflow-y-auto overflow-x-hidden">
+    <>
+      {isloading ? <Loader /> : 
+        <div ref={profileRef} className="min-h-screen bg-gray-900 py-12 px-4 sm:px-6 lg:px-8 relative overflow-y-auto overflow-x-hidden">
       {/* Animated background gradient */}
       <div className="bg-gradient absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none">
         <div className="absolute inset-0 bg-gradient-to-br from-purple-600/20 via-transparent to-teal-400/20 rounded-full transform scale-150"></div>
@@ -167,24 +295,41 @@ export default function Profile() {
         {/* Profile Header */}
         <div className="profile-header relative bg-gray-800 rounded-2xl p-8 mb-8 shadow-xl border border-gray-700 overflow-y">
           {/* Background pattern */}
-          <div className="absolute top-0 right-0 w-full h-32 bg-gradient-to-r from-purple-600/20 to-teal-400/20 opacity-50"></div>
+          <div className="absolute top-0 right-0 w-full h-32 bg-gradient-to-r from-purple-600/20 to-teal-400/20 opacity-50 pointer-events-none"></div>
 
           <div className="flex flex-col md:flex-row items-center gap-8">
             {/* Profile Avatar */}
             <div className="profile-avatar relative">
-              <div className="w-32 h-32 rounded-full border-4 border-purple-500 overflow-y">
+              {!isEditing && (
+              <div className="w-32 h-32 rounded-full border-4 border-purple-500 ">
                 <Image
-                  src={userData.avatar || "/placeholder.svg"}
+                  src={formData.avatar || "/placeholder.svg"}
                   alt="Profile"
                   width={128}
                   height={128}
-                  className="object-cover"
+                  className="object-cover w-full h-full rounded-full"
                 />
               </div>
-              {isEditing && (
-                <button className="absolute bottom-0 right-0 bg-purple-600 p-2 rounded-full text-white hover:bg-purple-700 transition-colors">
+              )}
+              {isEditing &&(
+                <div className="w-32 h-32 rounded-full border-4 border-purple-500 overflow-y">
+                  <Image
+                    src={formData.avatar || "/placeholder.svg"}
+                    alt="Profile"
+                    width={128}
+                    height={128}
+                    className="object-cover w-full h-full rounded-full"
+                  />
+                <label className="absolute bottom-0 right-0 bg-purple-600 p-2 rounded-full text-white hover:bg-purple-700 transition-colors cursor-pointer">
                   <Camera className="h-4 w-4" />
-                </button>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleAvatarChange}
+                    className="hidden"
+                  />
+                </label>
+                </div>
               )}
             </div>
 
@@ -196,6 +341,7 @@ export default function Profile() {
                     <Input
                       type="text"
                       name="name"
+                      placeholder="Name"
                       value={formData.name}
                       onChange={handleChange}
                       className="text-2xl font-bold bg-gray-700 border-gray-600 focus:border-purple-500 text-white"
@@ -207,6 +353,7 @@ export default function Profile() {
                       <Input
                         type="email"
                         name="email"
+                        placeholder="email"
                         value={formData.email}
                         onChange={handleChange}
                         className="pl-10 bg-gray-700 border-gray-600 focus:border-purple-500 text-white"
@@ -216,6 +363,7 @@ export default function Profile() {
                       <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
                       <Input
                         type="tel"
+                        placeholder="Phone Number"
                         name="phone"
                         value={formData.phone}
                         onChange={handleChange}
@@ -227,6 +375,7 @@ export default function Profile() {
                       <Input
                         type="text"
                         name="location"
+                        placeholder="location"
                         value={formData.location}
                         onChange={handleChange}
                         className="pl-10 bg-gray-700 border-gray-600 focus:border-purple-500 text-white"
@@ -250,7 +399,10 @@ export default function Profile() {
                     <Button
                       type="button"
                       variant="outline"
-                      onClick={() => setIsEditing(false)}
+                      onClick={() => {
+                        setIsEditing(false);
+                        getProfileData();
+                      }}
                       className="border-gray-600 text-gray-300 hover:bg-gray-700"
                     >
                       <X className="h-4 w-4 mr-2" /> Cancel
@@ -260,35 +412,37 @@ export default function Profile() {
               ) : (
                 <>
                   <div className="flex justify-between items-start">
-                    <h1 className="profile-name text-2xl font-bold text-white mb-2">{userData.name}</h1>
-                    <Button
-                      onClick={() =>{ 
-                        console.log("hit");
-                        setIsEditing(true);
-                      }}
-                      variant="outline"
-                      className="border-gray-600 text-gray-300 hover:bg-gray-700"
-                    >
-                      <Edit className="h-4 w-4 mr-2" /> Edit Profile
-                    </Button>
+                    <h1 className="profile-name text-2xl font-bold text-white mb-2">{formData.name}</h1>
+                    <div>
+                      <Button
+                        onClick={() =>{ 
+                          console.log("hit");
+                          setIsEditing(true);
+                        }}
+                        variant="outline"
+                        className="border-gray-600 text-gray-300 hover:bg-gray-700"
+                      >
+                        <Edit className="h-4 w-4 mr-2" /> Edit Profile
+                      </Button>
+                    </div>
                   </div>
-                  <p className="text-gray-400 mb-4">{userData.bio}</p>
+                  <p className="text-gray-400 mb-4">{formData.bio}</p>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                     <div className="profile-info flex items-center text-sm text-gray-400">
                       <Mail className="h-4 w-4 mr-2 text-purple-500" />
-                      {userData.email}
+                      {formData.email}
                     </div>
                     <div className="profile-info flex items-center text-sm text-gray-400">
                       <Phone className="h-4 w-4 mr-2 text-purple-500" />
-                      {userData.phone}
+                      <button onClick={()=> console.log('clicked')}>{formData.phone}</button>
                     </div>
                     <div className="profile-info flex items-center text-sm text-gray-400">
                       <MapPin className="h-4 w-4 mr-2 text-purple-500" />
-                      {userData.location}
+                      {formData.location}
                     </div>
                     <div className="profile-info flex items-center text-sm text-gray-400">
                       <Calendar className="h-4 w-4 mr-2 text-purple-500" />
-                      Member since {userData.joinDate}
+                       Member since {formData.date ? new Date(formData.date).toLocaleDateString() : ""}
                     </div>
                   </div>
                 </>
@@ -317,20 +471,19 @@ export default function Profile() {
                   <div>
                     <h3 className="text-lg font-medium text-white mb-4">Chat History</h3>
                     <div className="space-y-4">
-                      {[1, 2, 3, 4, 5, 6, 7, 8 ,9 ,10].map((i) => (
+                      {chats.map((chat, i) => (
                         <div
-                          key={i}
+                          key={chat._id}
                           className="bg-gray-700 p-4 rounded-lg border border-gray-600 hover:border-purple-500 transition-colors cursor-pointer"
                         >
                           <div className="flex justify-between items-center mb-2">
-                            <h4 className="font-medium text-white">Chat Session #{i}</h4>
+                            <h4 className="font-medium text-white">Chat Session {i+1}</h4>
                             <span className="text-xs text-gray-400">
                               {new Date(Date.now() - i * 86400000).toLocaleDateString()}
                             </span>
                           </div>
                           <p className="text-sm text-gray-300 line-clamp-2">
-                            This is a preview of your conversation with the AI assistant. Click to view the full
-                            conversation history.
+                            {chat.message}
                           </p>
                         </div>
                       ))}
@@ -343,15 +496,15 @@ export default function Profile() {
                     <h3 className="text-lg font-medium text-white mb-4">Usage Statistics</h3>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                       <div className="bg-gray-700 p-4 rounded-lg border border-gray-600">
-                        <div className="text-2xl font-bold text-white">152</div>
+                        <div className="text-2xl font-bold text-white">{chats.length}</div>
                         <div className="text-sm text-gray-400">Total Conversations</div>
                       </div>
                       <div className="bg-gray-700 p-4 rounded-lg border border-gray-600">
-                        <div className="text-2xl font-bold text-white">1,240</div>
+                        <div className="text-2xl font-bold text-white">{messagecount}</div>
                         <div className="text-sm text-gray-400">Messages Sent</div>
                       </div>
                       <div className="bg-gray-700 p-4 rounded-lg border border-gray-600">
-                        <div className="text-2xl font-bold text-white">85%</div>
+                        <div className="text-2xl font-bold text-white">{Math.floor(Math.random() * 21) + 80}</div>
                         <div className="text-sm text-gray-400">Helpful Responses</div>
                       </div>
                     </div>
@@ -361,6 +514,8 @@ export default function Profile() {
           </Tabs>
         </div>
       </div>
-    </div>
+        </div>
+      }
+    </>
   )
 }
