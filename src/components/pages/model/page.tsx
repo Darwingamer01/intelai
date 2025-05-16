@@ -4,7 +4,11 @@ import dynamic from "next/dynamic";
 
 const ModelViewer = dynamic(() => import('@/components/model/model'), { ssr: false });
 
+
 function Page() {
+    const handleLoad = () =>{
+        console.log("");
+    }
     return (
         <div
             style={{ width: '100vw', height: '100vh' }}
@@ -15,7 +19,7 @@ function Page() {
             <div className="absolute bottom-1/4 right-1/4 w-64 h-64 bg-teal-900 rounded-full filter blur-[90px] opacity-20 animate-pulse"></div>
 
             {/* Model Viewer */}
-            <ModelViewer />
+            <ModelViewer onLoad={handleLoad}/>
         </div>
     );
 }

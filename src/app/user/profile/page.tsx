@@ -296,7 +296,7 @@ export default function Profile() {
 
   return (
     <>
-      {isloading ? <Loader /> : 
+      {isloading ? <Loader message="Wanna Search..."/> : 
         <div ref={profileRef} className="min-h-screen bg-gray-900 py-12 px-4 sm:px-6 lg:px-8 relative overflow-y-auto overflow-x-hidden">
       {/* Animated background gradient */}
       <div className="bg-gradient absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none">
