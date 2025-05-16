@@ -24,7 +24,6 @@ import {
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import uploadImage from "@/components/upload/imageUpload"
 import Loader from "@/components/loader/loader"
 import axios from "axios"
 
@@ -70,8 +69,15 @@ export default function Profile() {
   const [isloading, setisloading] = useState(false);
   const [activeTab, setActiveTab] = useState("profile")
   const profileRef = useRef<HTMLDivElement>(null)
-  const token = localStorage.getItem('authToken');
-  console.log(token, 'token');
+
+  const [token, setToken] = useState<string | null>(null);
+
+  
+
+
+  
+  
+  
 
   const getProfileData = async()=>{
     setisloading(true);
@@ -121,9 +127,12 @@ export default function Profile() {
   };
   
   useEffect(() => {
+  const authToken = localStorage.getItem('authToken');
+  setToken(authToken);
+  console.log('authtoken', authToken);
   getProfileData();
   getUserChats();
-}, []);
+}, [token, setToken]);
 
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger)
@@ -238,6 +247,9 @@ export default function Profile() {
     setavatar(true);
   }
 };
+
+
+
 
   const handleSubmit = async (e: React.FormEvent) => {
   e.preventDefault();

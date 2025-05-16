@@ -6,7 +6,7 @@ import { useEffect, useRef } from "react"
 import { useRouter } from "next/navigation"
 import { gsap } from "gsap"
 import { MessageSquare, ImageIcon, Code, Sparkles, Zap } from "lucide-react"
-import { main, mainText } from "@/lib/gemini"
+import { main, multiMain } from "@/lib/gemini"
 import axios, { AxiosHeaders } from "axios";
 import { headers } from "next/headers"
 import { useState } from "react"
@@ -23,6 +23,16 @@ export default function ChatsPage({ params }: PageProps) {
   const router = useRouter()
   const containerRef = useRef<HTMLDivElement>(null)
   const [userChats, setuserChats] = useState([]);
+
+  
+interface historyProps {
+  history: Array<{
+    role: "user" | "model" | "";
+    parts: [{text:string}];
+  }>;
+}
+
+const history = [{ role: "user" as const, parts: [{ text: "" }] }];
 
   
   useEffect(() => {
@@ -107,7 +117,7 @@ export default function ChatsPage({ params }: PageProps) {
     const input = e.currentTarget.querySelector("input") as HTMLInputElement;
     const text = input.value;
     const data = {role: "user", message: text, images: "", date: new Date().toISOString()};
-    const answer= await mainText(text);
+    const answer = await multiMain({ history: [{ role: "user", parts: [{ text }] }] }, text);
     console.log(answer);
     const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/chats/`, data, {
       headers:{

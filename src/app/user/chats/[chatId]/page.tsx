@@ -15,7 +15,7 @@ import { main } from "@/lib/gemini"
 
 
 import { Container } from "postcss"
-import { mainText, multiMain } from "@/lib/gemini"
+import { multiMain } from "@/lib/gemini"
 import { stringify } from "querystring"
 
 interface PageProps {
