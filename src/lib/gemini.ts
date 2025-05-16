@@ -7,12 +7,19 @@ import {
 console.log(process.env.NEXT_PUBLIC_GEMINI_API_KEY);
 const ai = new GoogleGenAI({ apiKey: "AIzaSyCoqvBypN6qTDFB6aEUtmWPx0loa8hPPX4" });
 
-export async function main(imagePath: string, text: string) {
+export async function main(imageUrl: string, text: string) {
+  // Fetch the image as a Blob
+  const response = await fetch(imageUrl);
+  const blob = await response.blob();
+  // Optionally, create a File if needed:
+  const file = new File([blob], "image.jpg", { type: blob.type });
+
+  // Upload the file to Gemini
   const image = await ai.files.upload({
-    file: `${imagePath}`,
+    file: file,
   });
   const uri = image?.uri;
-  const response = await ai.models.generateContent({
+  const genResponse = await ai.models.generateContent({
     model: "gemini-2.0-flash",
     contents: [
       createUserContent([
@@ -21,15 +28,7 @@ export async function main(imagePath: string, text: string) {
       ]),
     ],
   });
-  console.log(response.text);
-}
-
-export async function mainText(text:string) {
-  const response = await ai.models.generateContent({
-    model: "gemini-2.0-flash",
-    contents: `${text}`,
-  });
-  const cleanedResponse = response?.text?.replace(/\*/g, "");
+  const cleanedResponse = genResponse.text?.replace(/\*/g, "");
   return cleanedResponse;
 }
 

@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button"
 import axios from "axios";
 import {use} from 'react';
 import { useParams } from "next/navigation"
+import { main } from "@/lib/gemini"
 
 
 import { Container } from "postcss"
@@ -47,7 +48,7 @@ export default function ChatPage({ params }: PageProps) {
   const searchParams = useSearchParams();
   const chatType = searchParams.get("type") || "general"
   
-
+  const [url, setUrl] = useState("");
   const [messages, setMessages] = useState<any[]>([])
   const [input, setInput] = useState("")
   const [isLoading, setIsLoading] = useState(false)
@@ -64,7 +65,32 @@ export default function ChatPage({ params }: PageProps) {
     images: string;
   }
 
+  interface ProfileData{
+    image: String,
+  }
+
+  const [formData, setFormData] = useState<ProfileData>({
+      image: "",
+    });
+
   const id = params.chatId;
+
+  const handleImageUpload = async (imagePath: Blob) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(imagePath);
+    const uploadFormData = new FormData();
+    uploadFormData.append("file", imagePath);
+    uploadFormData.append("upload_preset", "IntelAi"); 
+    const res = await fetch("https://api.cloudinary.com/v1_1/di4jbsdwo/image/upload", {
+      method: "POST",
+      body: uploadFormData,
+    });
+    const data = await res.json();
+    console.log(data, 'data');
+    return data.secure_url;
+  };
+
+
 
   useEffect(() => {
     // Fetch chat data from the backend API
@@ -214,6 +240,20 @@ return ctx.revert();
 
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
+    let imageFile: File | null = null;
+    let uploadedUrl: string | undefined = undefined;
+    if (fileInputRef.current && fileInputRef.current.files && fileInputRef.current.files.length > 0) {
+      console.log("hit");
+      imageFile = fileInputRef.current.files[0];
+      console.log(imageFile);
+      uploadedUrl = await handleImageUpload(imageFile);
+      setUrl(uploadedUrl || "");
+      
+    }
+
+    console.log(url, 'url');
+    
+    
     const text = input;
     
     if (!input.trim() && !imagePreview) return
@@ -223,10 +263,13 @@ return ctx.revert();
       role: "user",
       content: text,
       timestamp: new Date(),
-      image: imagePreview || undefined,
+      image: uploadedUrl || undefined,
     }
 
-    const data = {role: "user", message: text, image:"", date: new Date().toISOString()};
+    console.log(userMessage);
+
+    const data = {role: "user", message: text, image:uploadedUrl, date: new Date().toISOString()};
+    console.log(data);
     const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/chats/${id}`, data, {
       headers:{
         Authorization: `Bearer ${token}`
@@ -239,8 +282,15 @@ return ctx.revert();
 
     setMessages((prev) => [...prev, userMessage])
     setInput("")
+    uploadedUrl=undefined;
+    setUrl("");
     setImagePreview(null)
     setShowImageUpload(false)
+
+    if (fileInputRef.current) {
+    fileInputRef.current.value = "";
+    }
+
 
     // Simulate AI response
     setIsLoading(true)
@@ -259,7 +309,9 @@ return ctx.revert();
       const assistantMessage: Message = {
         id: (Date.now() + 1).toString(),
         role: "assistant",
-        content: (await multiMain({history}, text)) || "",
+        content: !imagePreview
+          ? (await multiMain({ history }, text)) ?? ""
+          : (await main(imagePreview, text)) ?? "",
         timestamp: new Date(),
       }
 
@@ -276,6 +328,7 @@ return ctx.revert();
       };
       setIsLoading(false)
       console.log(messages);
+      (e as unknown as React.FormEvent<HTMLFormElement> | null) = null;
     }, 1500)
   }
 
@@ -447,9 +500,6 @@ return ctx.revert();
             className="text-gray-400 hover:text-white"
           >
             <Paperclip className="h-5 w-5" />
-          </Button>
-          <Button type="button" variant="ghost" size="icon" className="text-gray-400 hover:text-white">
-            <Mic className="h-5 w-5" />
           </Button>
           <div className="flex-1 relative">
             <input
