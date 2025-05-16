@@ -1,22 +1,31 @@
-"use client"
+"use client";
 
-import { useEffect, useRef } from "react"
-import Image from "next/image"
-import { gsap } from "gsap"
-import { Button } from "@/components/ui/button"
-import { MessageSquare, ArrowRight } from "lucide-react"
 import dynamic from "next/dynamic";
-import Link from "next/link"
+import { useEffect, useRef, useState } from "react";
+import { gsap } from "gsap";
+import { Button } from "@/components/ui/button";
+import { MessageSquare, ArrowRight } from "lucide-react";
+import Link from "next/link";
+import Loader from "../loader/loader";
 
-
-const ModelViewer = dynamic(() => import('@/components/model/model'), { ssr: false });
+// ➊  Load the Three-JS canvas only on the client
+const ModelCanvas = dynamic(() => import("@/components/model/model"), {
+  ssr: false,
+});
 
 export default function Hero() {
-  const heroRef = useRef<HTMLDivElement>(null)
+  const heroRef = useRef<HTMLDivElement>(null);
+  const [loading, setLoading] = useState(true);
+
+  // ➋  Called from <ModelCanvas /> once the .glb has rendered
+  const handleModelLoad = () => {
+    setLoading(false);
+  };
 
   useEffect(() => {
+    if(loading) return;
     const ctx = gsap.context(() => {
-      // Animate hero content
+      
       gsap.from(".hero-title", {
         opacity: 0,
         y: 50,
@@ -74,11 +83,21 @@ export default function Hero() {
     }, heroRef)
 
     return () => ctx.revert()
-  }, [])
+  }, [loading])
 
   return (
-    <div ref={heroRef} className="relative min-h-screen flex items-center pt-20">
-      {/* Particles */}
+    <div
+      ref={heroRef}
+      className="relative min-h-screen flex items-center pt-20 overflow-hidden"
+    >
+      {/* ─────────────────  Loader overlay  ───────────────── */}
+      {loading && (
+        <div className="absolute inset-0 z-50 flex items-center justify-center bg-black/80">
+          <Loader message="AI will take your job" />
+        </div>
+      )}
+
+      {/* ───────────────  Hero content (always rendered)  ─────────────── */}
       {[...Array(20)].map((_, i) => (
         <div
           key={i}
@@ -89,21 +108,21 @@ export default function Hero() {
           }}
         />
       ))}
-
       <div className="container mx-auto px-4 grid md:grid-cols-2 gap-12 items-center">
-        {/* Hero Content */}
+        {/* Text side */}
         <div className="z-10">
           <h1 className="hero-title text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
             <span className="bg-gradient-to-r from-purple-500 to-teal-400 bg-clip-text text-transparent">
               AI-Powered Chat
-            </span>{" "}
+            </span>
             <br />
-            For The Future
+            For&nbsp;The&nbsp;Future
           </h1>
 
           <p className="hero-description text-lg md:text-xl text-gray-300 mb-8">
-            Experience the next generation of AI conversation. Our advanced chat platform delivers intelligent
-            responses, creative content, and helpful solutions.
+            Experience the next generation of AI conversation. Our advanced chat
+            platform delivers intelligent responses, creative content, and
+            helpful solutions.
           </p>
 
           <div className="hero-buttons flex flex-col sm:flex-row gap-4">
@@ -115,27 +134,28 @@ export default function Hero() {
             <Button
               variant="outline"
               className="border-white/20 text-white hover:bg-white/10 px-8 py-6 text-lg flex items-center gap-2 h-auto"
-              onClick={() => {
+              onClick={() =>
                 document.getElementById("features")?.scrollIntoView({
-                  behavior: "smooth"});
-                }}
+                  behavior: "smooth",
+                })
+              }
             >
               Learn More <ArrowRight className="h-5 w-5" />
             </Button>
           </div>
         </div>
 
-        {/* Hero Image */}
+        {/* Canvas side */}
         <div className="hero-image relative z-10 flex justify-center">
           <div className="relative w-full max-w-lg aspect-square">
-            <ModelViewer />
-            <div className="absolute inset-0 bg-gradient-to-r from-purple-500/20 to-teal-400/20 rounded-full blur-xl pointer-events-none"></div>
+            <ModelCanvas onLoad={handleModelLoad} />
+            <div className="absolute inset-0 bg-gradient-to-r from-purple-500/20 to-teal-400/20 rounded-full blur-xl pointer-events-none" />
           </div>
         </div>
       </div>
 
-      {/* Background gradient */}
-      <div className="absolute bottom-0 left-0 right-0 h-1/3 bg-gradient-to-t from-gray-900 to-transparent"></div>
+      {/* Background gradient at the bottom */}
+      <div className="absolute bottom-0 left-0 right-0 h-1/3 bg-gradient-to-t from-gray-900 to-transparent" />
     </div>
-  )
+  );
 }
