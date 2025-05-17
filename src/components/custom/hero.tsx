@@ -127,7 +127,7 @@ export default function Hero() {
 
           <div className="hero-buttons flex flex-col sm:flex-row gap-4">
             <Button className="bg-purple-600 hover:bg-purple-700 text-white px-8 py-6 text-lg flex items-center gap-2 h-auto">
-              <Link href="/sign-in">
+              <Link href="/user/chats">
                 Start Chatting <MessageSquare className="h-5 w-5" />
               </Link>
             </Button>
