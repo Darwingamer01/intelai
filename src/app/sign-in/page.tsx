@@ -186,7 +186,7 @@ export default function SignIn() {
       const { token } = response.data;
       localStorage.setItem("authToken", token);
       document.cookie = `authToken=${token}; path=/; max-age=86400; secure; samesite=strict`;
-      router.push("/")
+      router.push("/user/chats");
     } catch (err) {
       setError("Invalid email or password")
     } finally {

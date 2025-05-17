@@ -530,9 +530,9 @@ export default function VerifyEmail({setclose}:verifyEmailProps) {
 
         <p className="mt-8 text-center text-sm text-gray-400">
           Remember your password?{" "}
-          <Link href="/sign-in" className="text-purple-400 hover:text-purple-300 transition-colors">
+          <button onClick={()=>setclose(true)} className="text-purple-400 hover:text-purple-300 transition-colors">
             Sign in
-          </Link>
+          </button>
         </p>
       </div>
     </div>
