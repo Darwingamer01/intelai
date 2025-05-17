@@ -431,7 +431,9 @@ export default function VerifyEmail({setclose}:verifyEmailProps) {
                 {verificationCode.map((digit, index) => (
                   <Input
                     key={index}
-                    ref={(el) => (inputRefs.current[index] = el)}
+                    ref={(el) => {
+  inputRefs.current[index] = el;
+}}
                     type="text"
                     inputMode="numeric"
                     maxLength={6} // Allow paste of full code
