@@ -12,6 +12,7 @@ import { Input } from "@/components/ui/input"
 import { contain } from "three/src/extras/TextureUtils.js"
 import emailjs from '@emailjs/browser';
 import axios from "axios"
+import { sendEmailToUser } from "./email"
 
 interface verifyEmailProps{
   setclose: (value:boolean)=> void;
@@ -114,7 +115,7 @@ export default function VerifyEmail({setclose}:verifyEmailProps) {
       await new Promise((resolve) => setTimeout(resolve, 1500));
       verificationNumber = Math.floor(100000 + Math.random() * 900000);
       console.log(verificationNumber);
-      await emailjs.send('service_x9a1382', 'template_m25ij2i', {from_name:"intelAi", from_email:"IntelAi@siserpratap.com", to_email:`${email}`, message:`Your Verification Code is ${verificationNumber}`} ,'f_VZUB9-gBXWtZ5v1' ).then(
+      await sendEmailToUser(email, verificationNumber).then(
         () => {
           console.log("Mail Sent");
         },
@@ -169,7 +170,7 @@ export default function VerifyEmail({setclose}:verifyEmailProps) {
       await new Promise((resolve) => setTimeout(resolve, 1500));
       verificationNumber = Math.floor(100000 + Math.random() * 900000);
       console.log(verificationNumber);
-      await emailjs.send('service_x9a1382', 'template_m25ij2i', {from_name:"intelAi", from_email:"IntelAi@siserpratap.com", to_email:`${email}`, message:`Your Verification Code is ${verificationNumber}`} ,'f_VZUB9-gBXWtZ5v1' ).then(
+      await sendEmailToUser(email, verificationNumber).then(
         () => {
           console.log("Mail Sent");
         },
