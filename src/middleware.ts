@@ -8,7 +8,8 @@ export function middleware(request: NextRequest) {
   const isAuthRoute = pathname.startsWith('/sign-in') || pathname.startsWith('/sign-up');
 
   console.log("🔒 Middleware running on:", pathname);
-  console.log("🔑 Token present:", !!token);
+  console.log("🔑 Token present:", !!token, token);
+
 
   if (!token && pathname.startsWith('/user/chats')) {
     return NextResponse.redirect(new URL('/sign-in', request.url));

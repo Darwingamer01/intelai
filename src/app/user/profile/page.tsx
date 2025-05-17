@@ -26,6 +26,7 @@ import { Input } from "@/components/ui/input"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import Loader from "@/components/loader/loader"
 import axios from "axios"
+import { useRouter } from "next/navigation"
 
 
 const filePath = '/path/to/local/image.jpg';
@@ -69,6 +70,7 @@ export default function Profile() {
   const [isloading, setisloading] = useState(false);
   const [activeTab, setActiveTab] = useState("profile")
   const profileRef = useRef<HTMLDivElement>(null)
+  const router = useRouter();
 
   const [token, setToken] = useState<string | null>(null);
 
@@ -125,6 +127,7 @@ export default function Profile() {
     }
     
   };
+  
   
   useEffect(() => {
   const authToken = localStorage.getItem('authToken');
@@ -327,7 +330,7 @@ export default function Profile() {
                 <div className="w-32 h-32 rounded-full border-4 border-purple-500 overflow-y">
                   <Image
                     src={formData.avatar || "/placeholder.svg"}
-                    alt="Profile"
+                    alt=""
                     width={128}
                     height={128}
                     className="object-cover w-full h-full rounded-full"
@@ -486,12 +489,13 @@ export default function Profile() {
                       {chats.map((chat, i) => (
                         <div
                           key={chat._id}
+                          onClick={()=>{router.push(`/user/chats/${chat._id}`)}}
                           className="bg-gray-700 p-4 rounded-lg border border-gray-600 hover:border-purple-500 transition-colors cursor-pointer"
                         >
                           <div className="flex justify-between items-center mb-2">
                             <h4 className="font-medium text-white">Chat Session {i+1}</h4>
                             <span className="text-xs text-gray-400">
-                              {new Date(Date.now() - i * 86400000).toLocaleDateString()}
+                              {new Date(chat.date).toLocaleDateString()}
                             </span>
                           </div>
                           <p className="text-sm text-gray-300 line-clamp-2">
@@ -516,7 +520,7 @@ export default function Profile() {
                         <div className="text-sm text-gray-400">Messages Sent</div>
                       </div>
                       <div className="bg-gray-700 p-4 rounded-lg border border-gray-600">
-                        <div className="text-2xl font-bold text-white">{Math.floor(Math.random() * 21) + 80}</div>
+                        <div className="text-2xl font-bold text-white">{Math.floor(messagecount/2)}</div>
                         <div className="text-sm text-gray-400">Helpful Responses</div>
                       </div>
                     </div>
