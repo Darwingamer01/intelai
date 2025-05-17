@@ -44,7 +44,7 @@ export default function Home() {
   }, [])
 
   return (
-    <main ref={mainRef} className="min-h-screen bg-dark text-white overflow-hidden">
+    <main ref={mainRef} id="home" className="min-h-screen bg-dark text-white overflow-hidden">
       <div className="absolute inset-0 bg-grid-pattern opacity-10 parallax-bg"></div>
       <Navbar />
       <Hero />

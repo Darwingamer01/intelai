@@ -152,7 +152,7 @@ export default function Pricing() {
                     : "bg-gray-700 hover:bg-gray-600 text-white"
                 }`}
               >
-                <Link href="/chats">
+                <Link href="/user/chats">
                   Get Started
                 </Link>
               </Button>

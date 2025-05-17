@@ -6,10 +6,15 @@ import { gsap } from "gsap"
 import { Facebook, Twitter, Instagram, Linkedin, Github, Mail, Phone, MapPin } from "lucide-react"
 import { Button } from "../ui/button"
 import { Input } from "../ui/input"
+import { useState } from "react"
+import { Loader2 } from "lucide-react"
+import emailjs from "@emailjs/browser";
 
 
 export default function Footer() {
   const footerRef = useRef<HTMLDivElement>(null)
+  const [email, setemail] = useState("");
+  const [loading, setloading] = useState(false);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -34,6 +39,24 @@ export default function Footer() {
     document.getElementById(id)?.scrollIntoView({behavior: 'smooth'});
   }
 
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setemail(e.target.value);
+  };
+
+  const handleSubmit = () => {
+      setloading(true);
+      emailjs.send('service_x9a1382', 'template_m25ij2i', {from_name:"", to_name: "", from_email:email, to_email:"jay.siserpratap@gmail.com"} ,'f_VZUB9-gBXWtZ5v1' ).then(
+        () => {
+          setloading(false);
+          alert("Thank You. I will get back to you as soon as possible");
+          }, (error) => {
+          setloading(false)
+        console.log(error);
+      alert("Something Went wrong");
+    }
+      );
+  };
+
   return (
     <footer ref={footerRef} id="contact" className="bg-gray-900 pt-16 pb-8">
       <div className="container mx-auto px-4">
@@ -56,7 +79,7 @@ export default function Footer() {
             <h3 className="text-xl font-bold mb-6">Quick Links</h3>
             <ul className="space-y-3">
               <li>
-                <Link href="/" className="text-gray-400 hover:text-purple-500 transition-colors">
+                <Link href="/" onClick={()=>{scroll("home")}} className="text-gray-400 hover:text-purple-500 transition-colors">
                   Home
                 </Link>
               </li>
@@ -66,7 +89,7 @@ export default function Footer() {
                 </button>
               </li>
               <li>
-                <Link href="/chats" className="text-gray-400 hover:text-purple-500 transition-colors">
+                <Link href="/user/chats" className="text-gray-400 hover:text-purple-500 transition-colors">
                   Experience AI
                 </Link>
               </li>
@@ -89,7 +112,7 @@ export default function Footer() {
             <ul className="space-y-4">
               <li className="flex items-start">
                 <MapPin className="h-5 w-5 text-purple-500 mr-3 mt-1" />
-                <a href="https://3d-portfolio-seven-xi.vercel.app/" className="text-gray-400">Portfolio</a>
+                <a href="https://3d-portfolio-seven-xi.vercel.app/" className="text-gray-400 hover:text-purple-500">Portfolio</a>
               </li>
               <li className="flex items-center">
                 <Mail className="h-5 w-5 text-purple-500 mr-3" />
@@ -121,10 +144,16 @@ export default function Footer() {
             <div className="flex flex-col space-y-3">
               <Input
                 type="email"
+                value={email}
+                onChange={handleEmailChange}
                 placeholder="Your email address"
                 className="bg-gray-800 border-gray-700 focus:border-purple-500"
               />
-              <Button className="bg-purple-600 hover:bg-purple-700 text-white">Subscribe</Button>
+              <Button onClick={handleSubmit} className="bg-purple-600 hover:bg-purple-700 text-white">{loading ? (
+            <Loader2 className="animate-spin h-5 w-5 mr-2" />
+          ) : (
+            "Subscribe"
+          )}</Button>
             </div>
           </div>
         </div>
