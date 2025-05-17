@@ -10,6 +10,8 @@ import { Mail, Lock, ArrowRight, Github, Facebook, Twitter } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import axios from "axios";
+import { ForgotPasswordModal } from "@/components/auth/forgot-password"
+import VerifyEmail from "@/components/auth/verify-email"
 
 export default function SignIn() {
   const [email, setEmail] = useState("")
@@ -19,6 +21,8 @@ export default function SignIn() {
   const router = useRouter()
   const formRef = useRef<HTMLDivElement>(null)
   const containerRef = useRef<HTMLDivElement>(null)
+  const [isForgotPasswordOpen, setIsForgotPasswordOpen] = useState(false);
+  const [isVerifyEmail, setisVerifyEmail] = useState(false);
 
   // useEffect(() => {
   //   // Create a GSAP timeline for the animations
@@ -154,6 +158,14 @@ export default function SignIn() {
   
     return () => ctx.revert()
   }, [])
+
+  const forgot = () => {
+    setisVerifyEmail(true);
+  }
+
+  const setclose = () => {
+    setisVerifyEmail(false);
+  }
   
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -193,10 +205,8 @@ export default function SignIn() {
           key={i}
           className="particle absolute rounded-full bg-purple-500 opacity-20"
           style={{
-            width: `${10 + i * 2 * 10 + 5}px`,
-            height: `${10 + i * 2* 10 + 5}px`,
-            left: `${Math.random() * 100}%`,
-            top: `${Math.random() * 100}%`,
+            width: `${10 + i * 0.5 * 10 + 25}px`,
+            height: `${10 + i * 0.5* 10 + 25}px`,
           }}
         />
       ))}
@@ -205,7 +215,7 @@ export default function SignIn() {
       <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-purple-600 rounded-full filter blur-[120px] opacity-20 animate-pulse"></div>
       <div className="absolute bottom-1/4 right-1/4 w-64 h-64 bg-teal-400 rounded-full filter blur-[100px] opacity-20 animate-pulse"></div>
 
-      <div
+      {(!isForgotPasswordOpen && !isVerifyEmail) && <div
         ref={formRef}
         className="w-full max-w-md bg-gray-800/80 backdrop-blur-lg p-8 rounded-2xl shadow-xl border border-gray-700"
       >
@@ -220,7 +230,7 @@ export default function SignIn() {
           <div className="mb-4 p-3 bg-red-500/20 border border-red-500/50 rounded-lg text-red-200 text-sm">{error}</div>
         )}
 
-        <form onSubmit={handleSubmit} className="space-y-6">
+       {(!isForgotPasswordOpen && !isVerifyEmail) && <form onSubmit={handleSubmit} className="space-y-6">
           <div className="form-field relative">
             <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
             <Input
@@ -246,20 +256,9 @@ export default function SignIn() {
           </div>
 
           <div className="form-field flex items-center justify-between text-sm">
-            <div className="flex items-center">
-              <input
-                id="remember-me"
-                name="remember-me"
-                type="checkbox"
-                className="h-4 w-4 rounded border-gray-600 bg-gray-700 text-purple-600 focus:ring-purple-500"
-              />
-              <label htmlFor="remember-me" className="ml-2 block text-gray-300">
-                Remember me
-              </label>
-            </div>
-            <Link href="/forgot-password" className="text-purple-400 hover:text-purple-300 transition-colors">
+            <button onClick={forgot} className="text-purple-400 hover:text-purple-300 transition-colors">
               Forgot password?
-            </Link>
+            </button>
           </div>
 
           <Button
@@ -276,36 +275,16 @@ export default function SignIn() {
               </>
             )}
           </Button>
-        </form>
-
-        {/* <div className="mt-8">
-          <div className="divider relative flex items-center justify-center">
-            <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-gray-600"></div>
-            </div>
-            <div className="relative px-4 bg-gray-800 text-sm text-gray-400">Or continue with</div>
-          </div>
-
-          <div className="mt-6 grid grid-cols-3 gap-3">
-            <button className="social-button flex justify-center py-2 px-4 border border-gray-600 rounded-lg hover:bg-gray-700 transition-colors">
-              <Github className="h-5 w-5 text-white" />
-            </button>
-            <button className="social-button flex justify-center py-2 px-4 border border-gray-600 rounded-lg hover:bg-gray-700 transition-colors">
-              <Twitter className="h-5 w-5 text-white" />
-            </button>
-            <button className="social-button flex justify-center py-2 px-4 border border-gray-600 rounded-lg hover:bg-gray-700 transition-colors">
-              <Facebook className="h-5 w-5 text-white" />
-            </button>
-          </div>
-        </div> */}
-
+        </form>}
         <p className="signup-link mt-8 text-center text-sm text-gray-400">
           Don&apos;t have an account?{" "}
           <Link href="/sign-up" className="text-purple-400 hover:text-purple-300 transition-colors">
             Sign up
           </Link>
         </p>
-      </div>
+      </div>}
+       {isVerifyEmail && <VerifyEmail  setclose={setclose}/> }
+       {/* <ForgotPasswordModal isOpen={isForgotPasswordOpen} onClose={() => setIsForgotPasswordOpen(false)} /> */}
     </div>
   )
 }
