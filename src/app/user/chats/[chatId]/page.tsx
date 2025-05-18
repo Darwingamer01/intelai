@@ -99,6 +99,7 @@ export default function ChatPage({ params }: PageProps) {
         const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/chats/${id}`, {
           headers: {
             Authorization: `Bearer ${token}`,
+            
           },
         });
          const formattedChats = response.data.chats.map((chat: any) => ({
@@ -383,14 +384,14 @@ return ctx.revert();
             <Bot className="h-5 w-5 text-purple-400" />
           </div>
           <div>
-            <h2 className="font-semibold">{chatId.startsWith("chat") ? "Conversation" : "New Chat"}</h2>
+            <h2 className="font-semibold">{messages?.[0]?.content||"New Chat"}</h2>
             <p className="text-xs text-gray-400">
               {chatType === "general" ? "General Assistant" : chatType === "image" ? "Image Analysis" : "Code Helper"}
             </p>
           </div>
         </div>
         <div>
-          <Button variant="outline" size="sm" className="border-gray-600 text-gray-300 hover:bg-gray-700">
+          <Button variant="outline" onClick={()=> router.push('/user/chats')} size="sm" className="border-gray-600 text-gray-300 hover:bg-gray-700">
             <Sparkles className="h-4 w-4 mr-2 text-purple-400" />
             New Chat
           </Button>

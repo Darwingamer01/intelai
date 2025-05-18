@@ -39,10 +39,9 @@ const history = [{ role: "user" as const, parts: [{ text: "" }] }];
     if (!containerRef.current) return
 
     // Create a GSAP timeline for the animations
-    const tl = gsap.timeline()
-
     const ctx = gsap.context(()=>{
-      
+    
+    const tl = gsap.timeline()
     // Animate the welcome text
     tl.from(".welcome-title", {
       opacity: 0,
@@ -63,14 +62,22 @@ const history = [{ role: "user" as const, parts: [{ text: "" }] }];
       .from(
         ".chat-card",
         {
-          opacity: 0,
+          opacity: 0.3,
           y: 30,
           stagger: 0.1,
-          duration: 0.8,
-          ease: "back.out(1.4)",
+          duration: 0.2,
+          ease: "sign.inOut",
         },
         "-=0.4",
       )
+      .to(".chat-card", {
+      y: "+=10",
+      opacity: 1.2,
+      duration: 0.2,
+      stagger: 0.1,
+      ease: "sine.inOut",
+      yoyo:true,
+    })
       .from(
         ".chat-input",
         {
@@ -81,6 +88,7 @@ const history = [{ role: "user" as const, parts: [{ text: "" }] }];
         },
         "-=0.2",
       )
+      
 
     // Animate background elements
     gsap.to(".bg-gradient", {
@@ -91,14 +99,7 @@ const history = [{ role: "user" as const, parts: [{ text: "" }] }];
     })
 
     // Floating animation for the cards
-    gsap.to(".chat-card", {
-      y: "+=10",
-      opacity: 1.2,
-      duration: 1,
-      stagger: 0.1,
-      yoyo: true,
-      ease: "sine.inOut",
-    })
+    
   }, containerRef)
 
   return () => {
@@ -134,6 +135,7 @@ const history = [{ role: "user" as const, parts: [{ text: "" }] }];
     })
     console.log(newResponse.data);
     const addChat = {chatId: chatId, message: text, date: new Date().toISOString()};
+    console.log(addChat, 'addchat');
     const addChatId = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/userChats`, addChat, {
       headers:{
         Authorization: `Bearer ${localStorage.getItem("authToken")}`,
@@ -169,7 +171,7 @@ const history = [{ role: "user" as const, parts: [{ text: "" }] }];
       <div className="max-w-4xl w-full text-center mb-12">
         <h1 className="welcome-title text-4xl font-bold mb-4">
           <span className="bg-gradient-to-r from-purple-500 to-teal-400 bg-clip-text text-transparent">
-            Welcome to AI Chat
+            Welcome to Intel AI
           </span>
         </h1>
         <p className="welcome-subtitle text-gray-300 text-lg max-w-2xl mx-auto">
@@ -180,8 +182,8 @@ const history = [{ role: "user" as const, parts: [{ text: "" }] }];
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12 w-full max-w-4xl">
         <div
-          className="chat-card bg-gray-800/80 backdrop-blur-sm border border-gray-700 rounded-xl p-6 flex flex-col items-center text-center cursor-pointer hover:border-purple-500 transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/10"
-          onClick={() => handleCreateChat("general")}
+          className="chat-card bg-gray-800/80 backdrop-blur-sm border border-gray-700 rounded-xl p-6 flex flex-col items-center text-center  hover:border-purple-500 transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/10"
+          
         >
           <div className="w-16 h-16 rounded-full bg-purple-600/20 flex items-center justify-center mb-4">
             <MessageSquare className="h-8 w-8 text-purple-400" />
@@ -191,8 +193,7 @@ const history = [{ role: "user" as const, parts: [{ text: "" }] }];
         </div>
 
         <div
-          className="chat-card bg-gray-800/80 backdrop-blur-sm border border-gray-700 rounded-xl p-6 flex flex-col items-center text-center cursor-pointer hover:border-purple-500 transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/10"
-          onClick={() => handleCreateChat("image")}
+          className="chat-card bg-gray-800/80 backdrop-blur-sm border border-gray-700 rounded-xl p-6 flex flex-col items-center text-center  hover:border-purple-500 transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/10"
         >
           <div className="w-16 h-16 rounded-full bg-purple-600/20 flex items-center justify-center mb-4">
             <ImageIcon className="h-8 w-8 text-purple-400" />
@@ -202,8 +203,8 @@ const history = [{ role: "user" as const, parts: [{ text: "" }] }];
         </div>
 
         <div
-          className="chat-card bg-gray-800/80 backdrop-blur-sm border border-gray-700 rounded-xl p-6 flex flex-col items-center text-center cursor-pointer hover:border-purple-500 transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/10"
-          onClick={() => handleCreateChat("code")}
+          className="chat-card bg-gray-800/80 backdrop-blur-sm border border-gray-700 rounded-xl p-6 flex flex-col items-center text-center  hover:border-purple-500 transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/10"
+          
         >
           <div className="w-16 h-16 rounded-full bg-purple-600/20 flex items-center justify-center mb-4">
             <Code className="h-8 w-8 text-purple-400" />
@@ -217,7 +218,7 @@ const history = [{ role: "user" as const, parts: [{ text: "" }] }];
         <form onSubmit={handleInputSubmit} className="chat-input relative">
           <input
             type="text"
-            placeholder="Ask me anything..."
+            placeholder="Hii..."
             className="w-full bg-gray-800/80 backdrop-blur-sm border border-gray-700 rounded-full py-4 px-6 pr-12 text-white placeholder-gray-400 focus:outline-none focus:border-purple-500 transition-colors"
           />
           <button

@@ -19,7 +19,7 @@ interface LayoutProps {
 }
 
 interface chatsData{
-  _id: string,
+  chatId: string,
   message: string,
   date: Date,
 };
@@ -53,12 +53,15 @@ export default function UserLayout({ children, params }: LayoutProps) {
             Authorization: `Bearer ${token}`
           }
         });
+        console.log(res.data);
         if(res.data===null){
           setexisting(false);
           return;
         }
         const profileData = res.data;
-        setname(profileData.data.name);
+        console.log(profileData);
+        setname(profileData.name);
+        console.log(name, 'name');
         
       } catch (error:any) {
         console.log(error);
@@ -79,6 +82,7 @@ export default function UserLayout({ children, params }: LayoutProps) {
             Authorization: `Bearer ${token}`,
           },
         });
+        
         console.log(userChats);
         console.log(userChats.data);
         setchats(userChats.data.chats);
@@ -103,7 +107,10 @@ useEffect(() => {
   console.log('authtoken', authToken);
   getUserChats();
   getProfileData();
+
 }, [token, setToken]);
+
+
 
   useLayoutEffect(() => {
     const ctx = gsap.context(() => {
@@ -226,8 +233,8 @@ useEffect(() => {
             <div className="space-y-1">
               {chats.map((chat) => (
                 <Link
-                  key={chat._id}
-                  href={`/user/chats/${chat._id}`}
+                  key={chat.chatId}
+                  href={`/user/chats/${chat.chatId}`}
                   className={`chat-item flex items-center p-3 rounded-lg transition-colors `}
                 >
                   <MessageSquare className="h-4 w-4 mr-3 flex-shrink-0" />
