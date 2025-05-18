@@ -62,7 +62,7 @@ const history = [{ role: "user" as const, parts: [{ text: "" }] }];
       .from(
         ".chat-card",
         {
-          opacity: 0.3,
+          opacity: 0,
           y: 30,
           stagger: 0.1,
           duration: 0.2,

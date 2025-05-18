@@ -282,7 +282,14 @@ export default function SignIn() {
             Sign up
           </Link>
         </p>
+        <div className="flex justify-center items-center">
+          <button className=" absolute mt-6 text-center text-sm text-gray-400 hover:text-purple-400 transition-colors" onClick={()=>{
+            setEmail("insasp0@gmail.com");
+            setPassword("SISER123@jay");
+          }}>Guest Login</button>
+      </div>
       </div>}
+      
        {isVerifyEmail && <VerifyEmail  setclose={setclose}/> }
        {/* <ForgotPasswordModal isOpen={isForgotPasswordOpen} onClose={() => setIsForgotPasswordOpen(false)} /> */}
     </div>
