@@ -265,8 +265,8 @@ git push origin feature/your-feature-name
 ---
 
 <div align="center">
-  <p>Made with ❤️ by Your Name</p>
-  <p>© 2023 AI Chat App. All rights reserved.</p>
+  <p>Made with ❤️ by Siser Pratap</p>
+  <p>© 2025 IntelAi. All rights reserved.</p>
 </div>
 
 
