@@ -28,9 +28,12 @@ Intel Ai is a cutting-edge conversational AI platform that combines the power of
   
 </div>
 
-## ✨ Features
+<div id="features"></div>
 
-<div id="features" class="features-grid">
+## ✨ Features 
+
+
+<div  class="features-grid">
   <div class="feature-card">
     <h3>🤖 Advanced AI Chat</h3>
     <p>Engage in natural conversations with a state-of-the-art AI assistant</p>
@@ -58,6 +61,8 @@ Intel Ai is a cutting-edge conversational AI platform that combines the power of
   </div>
 </div>
 
+<div id="#tech-stack"></div>
+
 ## 🛠️ Tech Stack
 
 <p align="center">
@@ -70,6 +75,7 @@ Intel Ai is a cutting-edge conversational AI platform that combines the power of
   <img src="https://lucide.dev/logo.light.svg" alt="Lucide React" width="60" height="60" />
 </p>
 
+<div id="#implementation"></div>
 
 ## 🔍 Implementation
 
@@ -116,6 +122,7 @@ The Intel Ai includes the following key implementations:
 - Custom hooks for shared functionality
 - Proper state management
 
+<div id="#getting-started"></div>
 
 ## 🚀 Getting Started
 
@@ -170,6 +177,7 @@ yarn dev
 
 5. Open [http://localhost:3000](http://localhost:3000) in your browser to see the application.
 
+<div id="#contributing"></div>
 
 ## 🤝 Contributing
 
@@ -228,6 +236,7 @@ git push origin feature/your-feature-name
  3. Toast setup
  4. Loader at every page
 
+<div id="#contact"></div>
 
 ## 📞 Freelance Contact
 
