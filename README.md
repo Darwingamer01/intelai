@@ -30,7 +30,7 @@ Intel Ai is a cutting-edge conversational AI platform that combines the power of
 
 ## ✨ Features
 
-<div class="features-grid">
+<div id="features" class="features-grid">
   <div class="feature-card">
     <h3>🤖 Advanced AI Chat</h3>
     <p>Engage in natural conversations with a state-of-the-art AI assistant</p>
