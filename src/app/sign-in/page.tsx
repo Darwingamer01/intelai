@@ -12,6 +12,8 @@ import { Input } from "@/components/ui/input"
 import axios from "axios";
 import { ForgotPasswordModal } from "@/components/auth/forgot-password"
 import VerifyEmail from "@/components/auth/verify-email"
+import { toast } from 'sonner';
+import Loader from "@/components/loader/loader"
 
 export default function SignIn() {
   const [email, setEmail] = useState("")
@@ -23,6 +25,7 @@ export default function SignIn() {
   const containerRef = useRef<HTMLDivElement>(null)
   const [isForgotPasswordOpen, setIsForgotPasswordOpen] = useState(false);
   const [isVerifyEmail, setisVerifyEmail] = useState(false);
+  const [signinloading, setsigninloading] = useState(false);
 
   // useEffect(() => {
   //   // Create a GSAP timeline for the animations
@@ -154,6 +157,7 @@ export default function SignIn() {
         .from(".divider", { width: 0, duration: 0.8, ease: "power3.out" }, "-=0.4")
         .from(".social-button", { opacity: 0, scale: 0.8, duration: 0.6, stagger: 0.1, ease: "back.out(1.7)" }, "-=0.4")
         .from(".signup-link", { opacity: 0, y: 20, duration: 0.6, ease: "power3.out" }, "-=0.2")
+        .from(".guest", {opacity:0, y:20, duration:0.6, ease: "power3.out" }, "-=0.2")
     }, containerRef)
   
     return () => ctx.revert()
@@ -171,6 +175,7 @@ export default function SignIn() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError("")
+    setsigninloading(true);
 
     if (!email || !password) {
       setError("Please fill in all fields")
@@ -178,7 +183,6 @@ export default function SignIn() {
     }
 
     try {
-      setIsLoading(true)
       const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/login`, {
         email,
         password,
@@ -186,15 +190,17 @@ export default function SignIn() {
       const { token } = response.data;
       localStorage.setItem("authToken", token);
       document.cookie = `authToken=${token}; path=/; max-age=86400; secure; samesite=strict`;
+      setsigninloading(false);
+      toast.success('Sign-in Successfull');
       router.push("/user/chats");
+      setIsLoading(true);
     } catch (err) {
       setError("Invalid email or password")
-    } finally {
-      setIsLoading(false)
     }
   }
 
   return (
+    isLoading?<Loader message="Wanna Search..." />:
     <div
       ref={containerRef}
       className="min-h-screen flex items-center justify-center bg-gray-900 py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden"
@@ -266,7 +272,7 @@ export default function SignIn() {
             disabled={isLoading}
             className="signin-button w-full bg-purple-600 hover:bg-purple-700 text-white py-6 h-auto flex items-center justify-center gap-2 group"
           >
-            {isLoading ? (
+            {signinloading ? (
               <div className="h-5 w-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
             ) : (
               <>
@@ -283,7 +289,7 @@ export default function SignIn() {
           </Link>
         </p>
         <div className="flex justify-center items-center">
-          <button className=" absolute mt-6 text-center text-sm text-gray-400 hover:text-purple-400 transition-colors" onClick={()=>{
+          <button className="guest absolute mt-6 text-center text-sm text-gray-400 hover:text-purple-400 transition-colors" onClick={()=>{
             setEmail("insasp0@gmail.com");
             setPassword("SISER123@jay");
           }}>Guest Login</button>

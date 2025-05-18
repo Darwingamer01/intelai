@@ -27,6 +27,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import Loader from "@/components/loader/loader"
 import axios from "axios"
 import { useRouter } from "next/navigation"
+import Spinner from "@/components/ui/spinner"
 
 
 const filePath = '/path/to/local/image.jpg';
@@ -73,6 +74,7 @@ export default function Profile() {
   const router = useRouter();
 
   const [token, setToken] = useState<string | null>(null);
+  const [chatsloading, setchatsloading] = useState(false);
 
   
 
@@ -97,17 +99,19 @@ export default function Profile() {
       const profileData = res.data;
       setFormData(profileData);
       console.log(formData);
+      setTimeout(() => {
+        setisloading(false);
+      }, 1000);
     } catch (error:any) {
       console.log(error);
       console.log(error.message);
-    }
-    finally{
       setisloading(false);
     }
+    
   }
 
   const getUserChats = async() =>{
-    setisloading(true);
+    setchatsloading(true);
     try {
       const userChats = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/userChats`, {
         headers: {
@@ -118,14 +122,11 @@ export default function Profile() {
       console.log(userChats.data);
       setchats(userChats.data.chats);
       setmessagecount(userChats.data.messageCount);
-
+      setchatsloading(false);
     } catch (error:any) {
       console.log(error);
       console.log(error.message);
-    }finally{
-      setisloading(false);
     }
-    
   };
   
   
@@ -485,6 +486,7 @@ export default function Profile() {
                 <div className="space-y-6">
                   <div>
                     <h3 className="text-lg font-medium text-white mb-4">Chat History</h3>
+                  {chatsloading?<Spinner />:
                     <div className="space-y-4">
                       {chats.map((chat, i) => (
                         <div
@@ -504,6 +506,7 @@ export default function Profile() {
                         </div>
                       ))}
                     </div>
+                  }
                   </div>
               </div>
               </TabsContent>

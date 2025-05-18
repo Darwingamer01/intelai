@@ -7,6 +7,9 @@ import { Button } from "@/components/ui/button";
 import { MessageSquare, ArrowRight } from "lucide-react";
 import Link from "next/link";
 import Loader from "../loader/loader";
+import { toast } from "sonner";
+import Spinner from "../ui/spinner";
+import { useRouter } from "next/navigation";
 
 // ➊  Load the Three-JS canvas only on the client
 const ModelCanvas = dynamic(() => import("@/components/model/model"), {
@@ -16,6 +19,8 @@ const ModelCanvas = dynamic(() => import("@/components/model/model"), {
 export default function Hero() {
   const heroRef = useRef<HTMLDivElement>(null);
   const [loading, setLoading] = useState(true);
+  const [directing, setdirecting] = useState(false);
+  const router = useRouter();
 
   // ➋  Called from <ModelCanvas /> once the .glb has rendered
   const handleModelLoad = () => {
@@ -126,11 +131,13 @@ export default function Hero() {
           </p>
 
           <div className="hero-buttons flex flex-col sm:flex-row gap-4">
-            <Button className="bg-purple-600 hover:bg-purple-700 text-white px-8 py-6 text-lg flex items-center gap-2 h-auto">
+          {directing? <Spinner />:
+            <Button onClick={()=> {toast.success("Redirecting");setdirecting(true);router.push('/user/chats');}}className="bg-purple-600  hover:bg-purple-700 text-white px-8 py-6 text-lg flex items-center gap-2 h-auto">
               <Link href="/user/chats">
                 Start Chatting <MessageSquare className="h-5 w-5" />
               </Link>
             </Button>
+          }
             <Button
               variant="outline"
               className="border-white/20 text-white hover:bg-white/10 px-8 py-6 text-lg flex items-center gap-2 h-auto"

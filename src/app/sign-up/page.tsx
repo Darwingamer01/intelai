@@ -10,6 +10,7 @@ import { User, Mail, Lock, ArrowRight, Check, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import axios from "axios";
+import {toast} from 'sonner';
 
 export default function SignUp() {
   const [formData, setFormData] = useState({
@@ -188,9 +189,6 @@ export default function SignUp() {
 
     try {
       setIsLoading(true)
-      // Simulate API call
-      // await new Promise((resolve) => setTimeout(resolve, 1500))
-      console.log(formData);
       const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/signup`, {
         name: formData.name,
         email: formData.email,
@@ -201,6 +199,7 @@ export default function SignUp() {
       // Save the token in localStorage
       const { token } = response.data;
       localStorage.setItem("authToken", token);
+      toast.success("Sign-up Successfull, Redirecting to Sign-in");
       router.push("/sign-in")
     } catch (err) {
       setError("An error occurred during sign up")

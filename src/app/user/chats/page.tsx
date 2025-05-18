@@ -40,6 +40,10 @@ const history = [{ role: "user" as const, parts: [{ text: "" }] }];
 
     // Create a GSAP timeline for the animations
     const ctx = gsap.context(()=>{
+
+    gsap.set('.chat-card', {
+      opacity:0,
+    });
     
     const tl = gsap.timeline()
     // Animate the welcome text
@@ -59,17 +63,17 @@ const history = [{ role: "user" as const, parts: [{ text: "" }] }];
         },
         "-=0.6",
       )
-      .from(
-        ".chat-card",
-        {
-          opacity: 0,
-          y: 30,
-          stagger: 0.1,
-          duration: 0.2,
-          ease: "sign.inOut",
-        },
-        "-=0.4",
-      )
+      // .from(
+      //   ".chat-card",
+      //   {
+      //     opacity: 0,
+      //     y: 30,
+      //     stagger: 0.1,
+      //     duration: 0.2,
+      //     ease: "sign.inOut",
+      //   },
+      //   "-=0.4",
+      // )
       .to(".chat-card", {
       y: "+=10",
       opacity: 1.2,
@@ -182,7 +186,7 @@ const history = [{ role: "user" as const, parts: [{ text: "" }] }];
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12 w-full max-w-4xl">
         <div
-          className="chat-card bg-gray-800/80 backdrop-blur-sm border border-gray-700 rounded-xl p-6 flex flex-col items-center text-center  hover:border-purple-500 transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/10"
+          className="chat-card bg-gray-800/80 opacity-0 backdrop-blur-sm border border-gray-700 rounded-xl p-6 flex flex-col items-center text-center  hover:border-purple-500 transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/10"
           
         >
           <div className="w-16 h-16 rounded-full bg-purple-600/20 flex items-center justify-center mb-4">
@@ -193,7 +197,7 @@ const history = [{ role: "user" as const, parts: [{ text: "" }] }];
         </div>
 
         <div
-          className="chat-card bg-gray-800/80 backdrop-blur-sm border border-gray-700 rounded-xl p-6 flex flex-col items-center text-center  hover:border-purple-500 transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/10"
+          className="chat-card bg-gray-800/80 opacity-0 backdrop-blur-sm border border-gray-700 rounded-xl p-6 flex flex-col items-center text-center  hover:border-purple-500 transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/10"
         >
           <div className="w-16 h-16 rounded-full bg-purple-600/20 flex items-center justify-center mb-4">
             <ImageIcon className="h-8 w-8 text-purple-400" />
@@ -203,7 +207,7 @@ const history = [{ role: "user" as const, parts: [{ text: "" }] }];
         </div>
 
         <div
-          className="chat-card bg-gray-800/80 backdrop-blur-sm border border-gray-700 rounded-xl p-6 flex flex-col items-center text-center  hover:border-purple-500 transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/10"
+          className="chat-card bg-gray-800/80 opacity-0 backdrop-blur-sm border border-gray-700 rounded-xl p-6 flex flex-col items-center text-center  hover:border-purple-500 transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/10"
           
         >
           <div className="w-16 h-16 rounded-full bg-purple-600/20 flex items-center justify-center mb-4">

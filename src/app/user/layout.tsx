@@ -10,6 +10,9 @@ import { Button } from "@/components/ui/button"
 import axios from "axios"
 import Loader from "@/components/loader/loader"
 import { useRouter } from "next/navigation"
+import { toast } from "sonner"
+import Spinner from "@/components/ui/spinner"
+import { profile } from "console"
 
 interface LayoutProps {
   children: React.ReactNode
@@ -36,6 +39,10 @@ export default function UserLayout({ children, params }: LayoutProps) {
   const [existing, setexisting] = useState(true);
   const [name, setname] = useState("");
   const router =  useRouter();
+  const [chatsloading, setchatsloading] = useState(false);
+  const [profileloading, setprofileloading] = useState(false);
+  const [logoutloading, setlogoutloading] = useState(false);
+  const [directloading, setdirectloading] = useState(false);
 
 
    const recentChats = [
@@ -46,7 +53,7 @@ export default function UserLayout({ children, params }: LayoutProps) {
   ]
 
   const getProfileData = async()=>{
-      setisloading(true);
+      setprofileloading(true);
       try {
         const res = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/userProfile`, {
           headers:{
@@ -62,20 +69,21 @@ export default function UserLayout({ children, params }: LayoutProps) {
         console.log(profileData);
         setname(profileData.name);
         console.log(name, 'name');
+        setprofileloading(false);
         
       } catch (error:any) {
         console.log(error);
+        
         console.log(error.message);
+        setprofileloading(false);
       }
-      finally{
-        setisloading(false);
-      }
+      
     }
 
   
 
   const getUserChats = async() =>{
-      setisloading(true);
+      setchatsloading(true);
       try {
         const userChats = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/userChats`, {
           headers: {
@@ -86,19 +94,26 @@ export default function UserLayout({ children, params }: LayoutProps) {
         console.log(userChats);
         console.log(userChats.data);
         setchats(userChats.data.chats);
+        setchatsloading(false);
       } catch (error:any) {
         console.log(error);
+        
         console.log(error.message);
-      }finally{
-        setisloading(false);
       }
     };
 
 
     const handlelogout = async() => {
+      setlogoutloading(true);
       localStorage.setItem('authToken', "");
       document.cookie = 'authToken=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC; secure; samesite=strict';
+      toast.success("Logout SuccessFull");
+      setlogoutloading(false);
+      setTimeout(() => {
+      toast.success('Redirecting');
+    }, 400);
       router.push('/');
+      setlogoutloading(true);
     }
 
 useEffect(() => {
@@ -166,7 +181,6 @@ useEffect(() => {
 
   return (
     <>
-    {isloading?<Loader message="Wanna Search...." />:
     <div ref={containerRef} className="flex h-screen bg-gray-900 text-white overflow-hidden">
       <div
         className={`sidebar bg-gray-800 border-r border-gray-700 transition-all duration-300 ease-in-out ${
@@ -211,18 +225,22 @@ useEffect(() => {
               <PlusCircle className="h-5 w-5 mr-3" />
               {isSidebarOpen && <span>New Chat</span>}
             </Link>
-
-            <Link
-              href={`/user/profile`}
-              className={`sidebar-item flex items-center p-3 mb-2 rounded-lg transition-colors ${
-                pathname.includes("/profile")
-                  ? "bg-purple-600/20 text-purple-400 border border-purple-600/30"
-                  : "hover:bg-gray-700"
-              }`}
-            >
-              <User className="h-5 w-5 mr-3" />
-              {isSidebarOpen && <span>Profile</span>}
-            </Link>
+            {directloading? <Spinner />:
+              
+                <Link
+                  href={`/user/profile`}
+                  className={`sidebar-item flex items-center p-3 mb-2 rounded-lg transition-colors ${
+                    pathname.includes("/profile")
+                      ? "bg-purple-600/20 text-purple-400 border border-purple-600/30"
+                      : "hover:bg-gray-700"
+                  }`}
+                   onClick={()=> {setdirectloading(true);toast.success('Redirecting'); router.push('/user/profile');setdirectloading(false);}}
+                >
+                  <User className="h-5 w-5 mr-3" />
+                  {isSidebarOpen && <span>Profile</span>}
+                </Link>
+              
+          }
 
             {isSidebarOpen && (
               <div className="mt-8">
@@ -230,34 +248,38 @@ useEffect(() => {
               </div>
             )}
 
-            <div className="space-y-1">
-              {chats.map((chat) => (
-                <Link
-                  key={chat.chatId}
-                  href={`/user/chats/${chat.chatId}`}
-                  className={`chat-item flex items-center p-3 rounded-lg transition-colors `}
-                >
-                  <MessageSquare className="h-4 w-4 mr-3 flex-shrink-0" />
-                  {isSidebarOpen && (
-                    <div className="flex-1 min-w-0">
-                      <p className="truncate">{chat.message}</p>
-                      <p className="text-xs text-gray-400">
-                      {new Date(chat.date).toLocaleDateString()}
-                    </p>
-                    </div>
-                  )}
-                </Link>
-              ))}
-            </div>
+            {chatsloading?<Spinner />:
+              <div className="space-y-1">
+                {chats.map((chat) => (
+                  <Link
+                    key={chat.chatId}
+                    href={`/user/chats/${chat.chatId}`}
+                    className={`chat-item flex items-center p-3 rounded-lg transition-colors `}
+                  >
+                    <MessageSquare className="h-4 w-4 mr-3 flex-shrink-0" />
+                    {isSidebarOpen && (
+                      <div className="flex-1 min-w-0">
+                        <p className="truncate">{chat.message}</p>
+                        <p className="text-xs text-gray-400">
+                        {new Date(chat.date).toLocaleDateString()}
+                      </p>
+                      </div>
+                    )}
+                  </Link>
+                ))}
+              </div>
+            }
           </div>
 
           {/* User section */}
           <div className="p-4 border-t border-gray-700">
             <div className="sidebar-item flex items-center p-2">
               <div className="w-8 h-8 rounded-full bg-gradient-to-r from-purple-500 to-teal-400 flex items-center justify-center">
-                <span className="text-white font-semibold">
-                  {existing?name.split(" ").map(word => word[0]).join(""):""}
-                </span>
+                {profileloading?<Spinner />:
+                  <span className="text-white font-semibold">
+                    {existing?name.split(" ").map(word => word[0]).join(""):""}
+                  </span>
+              }
               </div>
               {isSidebarOpen && (
                 <div className="ml-3 flex-1">
@@ -267,10 +289,12 @@ useEffect(() => {
               )}
             </div>
 
-            <Button variant="ghost" onClick={handlelogout} className="sidebar-item w-full mt-2 text-gray-400 hover:text-white justify-start">
-              <LogOut className="h-4 w-4 mr-3" />
-              {isSidebarOpen && <span>Sign Out</span>}
-            </Button>
+          {logoutloading?<Spinner />:
+              <Button variant="ghost" onClick={handlelogout} className="sidebar-item w-full mt-2 text-gray-400 hover:text-white justify-start">
+                <LogOut className="h-4 w-4 mr-3" />
+                {isSidebarOpen && <span>Sign Out</span>}
+              </Button>
+          }
           </div>
         </div>
       </div>
@@ -278,7 +302,7 @@ useEffect(() => {
       {/* Main content */}
       <div className="main-content flex-1 overflow-hidden">{children}</div>
     </div>
-}
+
   </>
   )
 }
