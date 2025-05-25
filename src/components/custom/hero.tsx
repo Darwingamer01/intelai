@@ -93,6 +93,7 @@ export default function Hero() {
   return (
     <div
       ref={heroRef}
+      id="home"
       className="relative min-h-screen flex items-center pt-20 overflow-hidden"
     >
       {/* ─────────────────  Loader overlay  ───────────────── */}

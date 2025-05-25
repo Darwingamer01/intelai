@@ -11,7 +11,7 @@ import { CosmicLoader } from "../ui/cosmic-loader"
 
 
 const navItems = [
-  { name: "HOME", href: "/" },
+  { name: "HOME", href: "home" },
   { name: "FEATURES", href: "features"},
   { name: "CONTACT US", href: "contact" },
   {name: "PRICING", href: "pricing" },
@@ -146,7 +146,7 @@ export default function Navbar() {
         router.push(item.href);
       } else {
         document.getElementById(item.href)?.scrollIntoView({ behavior: "smooth" });
-        setIsOpen(false); // Close the mobile menu after clicking
+        setIsOpen(false); 
       }
     };
 

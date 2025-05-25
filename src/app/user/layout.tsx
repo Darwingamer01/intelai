@@ -30,7 +30,7 @@ interface chatsData{
 export default function UserLayout({ children, params }: LayoutProps) {
   const { userId } = params
   const pathname = usePathname()
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true)
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false)
   const hasMounted = useRef(false)
   const containerRef = useRef<HTMLDivElement>(null)
   const [isloading, setisloading] = useState(false);
@@ -181,11 +181,11 @@ useEffect(() => {
 
   return (
     <>
-    <div ref={containerRef} className="flex h-screen bg-gray-900 text-white overflow-hidden">
+    <div ref={containerRef} className="flex h-screen bg-gray-900 text-white overflow-hidden ">
       <div
         className={`sidebar bg-gray-800 border-r border-gray-700 transition-all duration-300 ease-in-out ${
-          isSidebarOpen ? "w-64" : "w-20"
-        }`}
+          isSidebarOpen ? "w-64" : "w-20" 
+        } md:${!isSidebarOpen? "flex":"hidden"}`}
       >
         <div className="flex flex-col h-full">
           {/* Logo and toggle */}
