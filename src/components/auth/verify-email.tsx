@@ -423,11 +423,11 @@ export default function VerifyEmail({setclose}:verifyEmailProps) {
 
         {step === "verification" && (
           <form onSubmit={handleVerifySubmit} className="verification-form space-y-6">
-            <div className="form-field">
+            <div className="form-field flex flex-col gap-2 items-center ">
               <label htmlFor="verification-code" className="block text-sm font-medium text-gray-300 mb-2">
                 Verification Code
               </label>
-              <div className="flex gap-2 justify-between">
+              <div className="flex gap-2 justify-between w-full">
                 {verificationCode.map((digit, index) => (
                   <Input
                     key={index}
@@ -440,7 +440,7 @@ export default function VerifyEmail({setclose}:verifyEmailProps) {
                     value={digit}
                     onChange={(e) => handleVerificationCodeChange(index, e.target.value)}
                     onKeyDown={(e) => handleKeyDown(index, e)}
-                    className="w-12 h-12 text-center text-xl bg-gray-700 border-gray-600 focus:border-purple-500 text-white"
+                    className="flex-1 min-w-0 w-12 h-12 text-center text-xl bg-gray-700 border-gray-600 focus:border-purple-500 text-white"
                     autoFocus={index === 0}
                   />
                 ))}
