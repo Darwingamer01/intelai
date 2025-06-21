@@ -15,7 +15,7 @@ const navItems = [
   { name: "FEATURES", href: "features"},
   { name: "CONTACT US", href: "contact" },
   {name: "PRICING", href: "pricing" },
-  {name: "EXPERIENCE AI", href: "/chat"},
+  {name: "EXPERIENCE AI", href: "/user/chats"},
 ]
 
 export default function Navbar() {

@@ -185,7 +185,7 @@ useEffect(() => {
       <div
         className={`sidebar bg-gray-800 border-r border-gray-700 transition-all duration-300 ease-in-out ${
           isSidebarOpen ? "w-64" : "w-20" 
-        } md:${!isSidebarOpen? "flex":"hidden"}`}
+        } sm:${!isSidebarOpen? "flex":"hidden"}`}
       >
         <div className="flex flex-col h-full">
           {/* Logo and toggle */}
@@ -204,10 +204,10 @@ useEffect(() => {
               variant="ghost"
               size="icon"
               onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-              className="text-gray-400 hover:text-white"
+              className={`text-gray-400 hover:text-white h-2 w-2`}
             >
               <ChevronRight
-                className={`h-5 w-5 transition-transform duration-300 ${isSidebarOpen ? "rotate-180" : ""}`}
+                className={`h-auto w-auto transition-transform duration-300 ${isSidebarOpen ? "rotate-180" : ""}`}
               />
             </Button>
           </div>
@@ -216,7 +216,7 @@ useEffect(() => {
           <div className="p-4 flex-1 overflow-y-auto">
             <Link
               href={`/user/chats`}
-              className={`sidebar-item flex items-center p-3 mb-2 rounded-lg transition-colors ${
+              className={`sidebar-item flex items-center p-3 mb-2 rounded-lg transition-colors overflow-hidden ${
                 pathname === `/user/chats`
                   ? "bg-purple-600/20 text-purple-400 border border-purple-600/30"
                   : "hover:bg-gray-700"

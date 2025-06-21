@@ -45,10 +45,10 @@ export default function Footer() {
 
   const handleSubmit = () => {
       setloading(true);
-      emailjs.send('service_x9a1382', 'template_m25ij2i', {from_name:"", to_name: "", from_email:email, to_email:"jay.siserpratap@gmail.com"} ,'f_VZUB9-gBXWtZ5v1' ).then(
+      emailjs.send('service_x9a1382', 'template_m25ij2i', {from_name:"IntelAi", to_name: "", from_email:email, to_email:"jay.siserpratap@gmail.com", message:`Email: ${email}`},'f_VZUB9-gBXWtZ5v1' ).then(
         () => {
           setloading(false);
-          alert("Thank You. I will get back to you as soon as possible");
+          alert("Thank you for subscribing.");
           }, (error) => {
           setloading(false)
         console.log(error);
