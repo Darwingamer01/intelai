@@ -301,7 +301,7 @@ export default function Profile() {
   return (
     <>
       {isloading ? <Loader message="Wanna Search..."/> : 
-        <div ref={profileRef} className="min-h-screen bg-gray-900 py-12 px-4 sm:px-6 lg:px-8 relative overflow-y-auto overflow-x-hidden">
+        <div ref={profileRef} className="min-h-screen h-full bg-gray-900 py-12 px-4 sm:px-6 lg:px-8 relative overflow-y-auto overflow-x-hidden ">
       {/* Animated background gradient */}
       <div className="bg-gradient absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none">
         <div className="absolute inset-0 bg-gradient-to-br from-purple-600/20 via-transparent to-teal-400/20 rounded-full transform scale-150"></div>
@@ -350,118 +350,118 @@ export default function Profile() {
             </div>
 
             {/* Profile Info */}
-            <div className="flex-1">
+            <div className="flex-1 w-full min-w-0">
               {isEditing ? (
-                <form onSubmit={handleSubmit} className="space-y-4">
-                  <div>
-                    <Input
-                      type="text"
-                      name="name"
-                      placeholder="Name"
-                      value={formData.name}
-                      onChange={handleChange}
-                      className="text-2xl font-bold bg-gray-700 border-gray-600 focus:border-purple-500 text-white"
-                    />
-                  </div>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="relative">
-                      <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
-                      <Input
-                        type="email"
-                        name="email"
-                        placeholder="email"
-                        value={formData.email}
-                        onChange={handleChange}
-                        className="pl-10 bg-gray-700 border-gray-600 focus:border-purple-500 text-white"
-                      />
-                    </div>
-                    <div className="relative">
-                      <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
-                      <Input
-                        type="tel"
-                        placeholder="Phone Number"
-                        name="phone"
-                        value={formData.phone}
-                        onChange={handleChange}
-                        className="pl-10 bg-gray-700 border-gray-600 focus:border-purple-500 text-white"
-                      />
-                    </div>
-                    <div className="relative">
-                      <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
-                      <Input
-                        type="text"
-                        name="location"
-                        placeholder="location"
-                        value={formData.location}
-                        onChange={handleChange}
-                        className="pl-10 bg-gray-700 border-gray-600 focus:border-purple-500 text-white"
-                      />
-                    </div>
-                  </div>
-                  <div>
-                    <textarea
-                      name="bio"
-                      value={formData.bio}
-                      onChange={handleChange}
-                      rows={3}
-                      className="w-full rounded-md bg-gray-700 border border-gray-600 focus:border-purple-500 text-white p-3"
-                      placeholder="Bio"
-                    ></textarea>
-                  </div>
-                  <div className="flex gap-2">
-                    <Button type="submit" className="bg-purple-600 hover:bg-purple-700 text-white">
-                      <Save className="h-4 w-4 mr-2" /> Save Changes
-                    </Button>
-                    <Button
-                      type="button"
-                      variant="outline"
-                      onClick={() => {
-                        setIsEditing(false);
-                        getProfileData();
-                      }}
-                      className="border-gray-600 text-gray-300 hover:bg-gray-700"
-                    >
-                      <X className="h-4 w-4 mr-2" /> Cancel
-                    </Button>
-                  </div>
-                </form>
+              <form onSubmit={handleSubmit} className="space-y-4">
+                <div>
+                <Input
+                  type="text"
+                  name="name"
+                  placeholder="Name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  className="text-2xl font-bold bg-gray-700 border-gray-600 focus:border-purple-500 text-white w-full"
+                />
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="relative">
+                  <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+                  <Input
+                  type="email"
+                  name="email"
+                  placeholder="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  className="pl-10 bg-gray-700 border-gray-600 focus:border-purple-500 text-white w-full"
+                  />
+                </div>
+                <div className="relative">
+                  <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+                  <Input
+                  type="tel"
+                  placeholder="Phone Number"
+                  name="phone"
+                  value={formData.phone}
+                  onChange={handleChange}
+                  className="pl-10 bg-gray-700 border-gray-600 focus:border-purple-500 text-white w-full"
+                  />
+                </div>
+                <div className="relative md:col-span-2">
+                  <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+                  <Input
+                  type="text"
+                  name="location"
+                  placeholder="location"
+                  value={formData.location}
+                  onChange={handleChange}
+                  className="pl-10 bg-gray-700 border-gray-600 focus:border-purple-500 text-white w-full"
+                  />
+                </div>
+                </div>
+                <div>
+                <textarea
+                  name="bio"
+                  value={formData.bio}
+                  onChange={handleChange}
+                  rows={3}
+                  className="w-full rounded-md bg-gray-700 border border-gray-600 focus:border-purple-500 text-white p-3"
+                  placeholder="Bio"
+                ></textarea>
+                </div>
+                <div className="flex flex-col sm:flex-row gap-2">
+                <Button type="submit" className="bg-purple-600 hover:bg-purple-700 text-white w-full sm:w-auto">
+                  <Save className="h-4 w-4 mr-2" /> Save Changes
+                </Button>
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => {
+                  setIsEditing(false);
+                  getProfileData();
+                  }}
+                  className="border-gray-600 text-gray-300 hover:bg-gray-700 w-full sm:w-auto"
+                >
+                  <X className="h-4 w-4 mr-2" /> Cancel
+                </Button>
+                </div>
+              </form>
               ) : (
-                <>
-                  <div className="flex justify-between items-start">
-                    <h1 className="profile-name text-2xl font-bold text-white mb-2">{formData.name}</h1>
-                    <div>
-                      <Button
-                        onClick={() =>{ 
-                          console.log("hit");
-                          setIsEditing(true);
-                        }}
-                        variant="outline"
-                        className="border-gray-600 text-gray-300 hover:bg-gray-700"
-                      >
-                        <Edit className="h-4 w-4 mr-2" /> Edit Profile
-                      </Button>
-                    </div>
-                  </div>
-                  <p className="text-gray-400 mb-4">{formData.bio}</p>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                    <div className="profile-info flex items-center text-sm text-gray-400">
-                      <Mail className="h-4 w-4 mr-2 text-purple-500" />
-                      {formData.email}
-                    </div>
-                    <div className="profile-info flex items-center text-sm text-gray-400">
-                      <Phone className="h-4 w-4 mr-2 text-purple-500" />
-                      <button onClick={()=> console.log('clicked')}>{formData.phone}</button>
-                    </div>
-                    <div className="profile-info flex items-center text-sm text-gray-400">
-                      <MapPin className="h-4 w-4 mr-2 text-purple-500" />
-                      {formData.location}
-                    </div>
-                    <div className="profile-info flex items-center text-sm text-gray-400">
-                      <Calendar className="h-4 w-4 mr-2 text-purple-500" />
-                       Member since {formData.date ? new Date(formData.date).toLocaleDateString() : ""}
-                    </div>
-                  </div>
-                </>
+              <>
+                <div className="flex flex-col sm:flex-row justify-between items-start gap-2">
+                <h1 className="profile-name text-2xl font-bold text-white mb-2 break-words">{formData.name}</h1>
+                <div className="w-full sm:w-auto">
+                  <Button
+                  onClick={() =>{ 
+                    console.log("hit");
+                    setIsEditing(true);
+                  }}
+                  variant="outline"
+                  className="border-gray-600 text-gray-300 hover:bg-gray-700 w-full sm:w-auto"
+                  >
+                  <Edit className="h-4 w-4 mr-2" /> Edit Profile
+                  </Button>
+                </div>
+                </div>
+                <p className="text-gray-400 mb-4 break-words">{formData.bio}</p>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                <div className="profile-info flex items-center text-sm text-gray-400 break-words">
+                  <Mail className="h-4 w-4 mr-2 text-purple-500" />
+                  {formData.email}
+                </div>
+                <div className="profile-info flex items-center text-sm text-gray-400 break-words">
+                  <Phone className="h-4 w-4 mr-2 text-purple-500" />
+                  <button onClick={()=> console.log('clicked')}>{formData.phone}</button>
+                </div>
+                <div className="profile-info flex items-center text-sm text-gray-400 break-words">
+                  <MapPin className="h-4 w-4 mr-2 text-purple-500" />
+                  {formData.location}
+                </div>
+                <div className="profile-info flex items-center text-sm text-gray-400 break-words">
+                  <Calendar className="h-4 w-4 mr-2 text-purple-500" />
+                   Member since {formData.date ? new Date(formData.date).toLocaleDateString() : ""}
+                </div>
+                </div>
+              </>
               )}
             </div>
           </div>
@@ -481,7 +481,7 @@ export default function Profile() {
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-chart-no-axes-combined-icon lucide-chart-no-axes-combined "><path d="M12 16v5"/><path d="M16 14v7"/><path d="M20 10v11"/><path d="m22 3-8.646 8.646a.5.5 0 0 1-.708 0L9.354 8.354a.5.5 0 0 0-.707 0L2 15"/><path d="M4 18v3"/><path d="M8 14v7"/></svg><div className="ml-2">Statistics</div>
               </TabsTrigger>
             </TabsList>
-            <div className="p-6 overflow-y-auto max-h-[80vh]">
+            <div className="p-6 overflow-y-auto sm:max-h-[80vh] max-h-screen">
               <TabsContent value="profile" className="tab-content mt-0">
                 <div className="space-y-6">
                   <div>
