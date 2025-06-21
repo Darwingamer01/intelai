@@ -10,6 +10,7 @@ import { main, multiMain } from "@/lib/gemini"
 import axios, { AxiosHeaders } from "axios";
 import { headers } from "next/headers"
 import { useState } from "react"
+import Spinner from "@/components/ui/spinner"
 
 
 interface PageProps {
@@ -23,6 +24,8 @@ export default function ChatsPage({ params }: PageProps) {
   const router = useRouter()
   const containerRef = useRef<HTMLDivElement>(null)
   const [userChats, setuserChats] = useState([]);
+  const [loading, setloading] = useState(false);
+  
 
   
 interface historyProps {
@@ -119,6 +122,7 @@ const history = [{ role: "user" as const, parts: [{ text: "" }] }];
   
   const handleInputSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    setloading(true);
     const input = e.currentTarget.querySelector("input") as HTMLInputElement;
     const text = input.value;
     const data = {role: "user", message: text, images: "", date: new Date().toISOString()};
@@ -147,6 +151,7 @@ const history = [{ role: "user" as const, parts: [{ text: "" }] }];
     })
     console.log(addChatId.data);
     router.push(`/user/chats/${chatId}`)
+    setloading(false);
   }
 
   
@@ -213,7 +218,7 @@ const history = [{ role: "user" as const, parts: [{ text: "" }] }];
       </div>
 
       <div className="w-full max-w-2xl px-2">
-        <form onSubmit={handleInputSubmit} className="chat-input relative sm:mt-8 mt-8">
+        <form onSubmit={handleInputSubmit} className="chat-input relative sm:mt-8 mt-8 flex flex-row">
           <input
             type="text"
             placeholder="Hii..."
@@ -221,9 +226,9 @@ const history = [{ role: "user" as const, parts: [{ text: "" }] }];
           />
           <button
             type="submit"
-            className="absolute right-2 sm:right-3 top-1/2 transform -translate-y-1/2 bg-gradient-to-r from-purple-500 to-teal-400 rounded-full p-2 text-white"
+            className=" bg-gradient-to-r from-purple-500 to-teal-400 rounded-full p-2 sm:p-4 ml-1 text-white"
           >
-            <Sparkles className="h-5 w-5" />
+            {loading?<div className="relative "><Spinner /></div>:<Sparkles className="h-5 w-5 " />}
           </button>
         </form>
       </div>
