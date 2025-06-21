@@ -27,107 +27,7 @@ export default function SignIn() {
   const [isVerifyEmail, setisVerifyEmail] = useState(false);
   const [signinloading, setsigninloading] = useState(false);
 
-  // useEffect(() => {
-  //   // Create a GSAP timeline for the animations
-  //   const tl = gsap.timeline()
-
-  //   setTimeout(()=>{
-  //     gsap.set(".particle", {
-  //       x: () => Math.random() * window.innerWidth,
-  //       y: () => Math.random() * window.innerHeight,
-  //       opacity: () => Math.random() * 0.5 + 0.2,
-  //       scale: () => Math.random() * 0.8 + 0.2,
-  //     })
   
-  //     // Animate the background particles
-  //     gsap.to(".particle", {
-  //       x: "+=50",
-  //       y: "+=30",
-  //       rotation: "+=15",
-  //       duration: 8,
-  //       ease: "sine.inOut",
-  //       repeat: -1,
-  //       yoyo: true,
-  //       stagger: 0.1,
-  //     })
-  
-  //     // Animate the form elements
-  //     tl.from(".signin-title", {
-  //       opacity: 0,
-  //       y: -30,
-  //       duration: 0.8,
-  //       ease: "power3.out",
-  //     })
-  //       .from(
-  //         ".signin-subtitle",
-  //         {
-  //           opacity: 0,
-  //           y: -20,
-  //           duration: 0.8,
-  //           ease: "power3.out",
-  //         },
-  //         "-=0.6",
-  //       )
-  //       .from(
-  //         ".form-field",
-  //         {
-  //           opacity: 0,
-  //           y: 20,
-  //           duration: 0.6,
-  //           stagger: 0.2,
-  //           ease: "power3.out",
-  //         },
-  //         "-=0.4",
-  //       )
-  //       .from(
-  //         ".signin-button",
-  //         {
-  //           opacity: 0,
-  //           y: 20,
-  //           duration: 0.6,
-  //           ease: "power3.out",
-  //         },
-  //         "-=0.2",
-  //       )
-  //       .from(
-  //         ".divider",
-  //         {
-  //           width: 0,
-  //           duration: 0.8,
-  //           ease: "power3.out",
-  //         },
-  //         "-=0.4",
-  //       )
-  //       .from(
-  //         ".social-button",
-  //         {
-  //           opacity: 0,
-  //           scale: 0.8,
-  //           duration: 0.6,
-  //           stagger: 0.1,
-  //           ease: "back.out(1.7)",
-  //         },
-  //         "-=0.4",
-  //       )
-  //       .from(
-  //         ".signup-link",
-  //         {
-  //           opacity: 0,
-  //           y: 20,
-  //           duration: 0.6,
-  //           ease: "power3.out",
-  //         },
-  //         "-=0.2",
-  //       )
-  //   }, 0);
-    
-    
-
-  //   // Cleanup function
-  //   return () => {
-  //     tl.kill()
-  //   }
-  // }, [])
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -196,6 +96,7 @@ export default function SignIn() {
       setIsLoading(true);
     } catch (err) {
       setError("Invalid email or password")
+      setsigninloading(false);
     }
   }
 
