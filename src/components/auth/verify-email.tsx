@@ -154,6 +154,7 @@ export default function VerifyEmail({setclose}:verifyEmailProps) {
     console.log('clicked');
     setError("")
     setSuccess("")
+    setVerificationCode(["", "", "", "", "", ""]);
 
     if (!email) {
       setError("Please enter your email address")
@@ -273,6 +274,7 @@ export default function VerifyEmail({setclose}:verifyEmailProps) {
         }, 1500)
       } else {
         setError("Invalid verification code. Please try again.")
+        setVerificationCode(["", "", "", "", "", ""]);
       }
     } catch (err) {
       setError("An error occurred. Please try again.")

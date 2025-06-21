@@ -5,7 +5,7 @@ import { useEffect, useRef, useLayoutEffect, useState } from "react"
 import { usePathname } from "next/navigation"
 import Link from "next/link"
 import { gsap } from "gsap"
-import { MessageSquare, PlusCircle, Settings, LogOut, ChevronRight, User } from "lucide-react"
+import { MessageSquare, PlusCircle, Settings, LogOut, ChevronRight, User, Divide } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import axios from "axios"
 import Loader from "@/components/loader/loader"
@@ -248,7 +248,7 @@ useEffect(() => {
               </div>
             )}
 
-            {chatsloading?<Spinner />:
+            {chatsloading?<div className="mr-2 sm:mr-4"><Spinner /></div>:
               <div className="space-y-1">
                 {chats.map((chat) => (
                   <Link
