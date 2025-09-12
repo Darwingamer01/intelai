@@ -5,7 +5,7 @@ import {
 } from "@google/genai";
 
 console.log(process.env.NEXT_PUBLIC_GEMINI_API_KEY);
-const ai = new GoogleGenAI({ apiKey: "AIzaSyCoqvBypN6qTDFB6aEUtmWPx0loa8hPPX4" });
+const ai = new GoogleGenAI({ apiKey: "AIzaSyBkvkI9Dnv79EpKY1r1mX1cdq5ImQDLHiw" });
 
 export async function main(imageUrl: string, text: string) {
   // Fetch the image as a Blob
