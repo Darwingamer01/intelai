@@ -237,7 +237,3 @@ git push origin feature/your-feature-name
  4. Loader at every page
 ---
 
-<div align="center">
-<p>Made with ❤️ by Siser Pratap</p>
-  <p>© 2025 IntelAi. All rights reserved.</p>
-</div>
