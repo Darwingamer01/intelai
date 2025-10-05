@@ -235,33 +235,6 @@ git push origin feature/your-feature-name
  2. Arrow Animation in learn more button
  3. Toast setup
  4. Loader at every page
-
-<div id="contact"></div>
-
-## 📞 Freelance Contact
-
-<div class="contact-card">
-  <img src="https://github.com/Siser-Pratap.png" alt="Developer Avatar" width="80" height="80" class="avatar" />
-  <div class="contact-info">
-    <h3>Siser Pratap</h3>
-    <p>Full Stack Developer</p>
-    <div class="social-links">
-      <a href="https://github.com/Siser-Pratap" target="_blank">
-        <img src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white" alt="GitHub" />
-      </a>
-      <a href="https://linkedin.com/in/siser" target="_blank">
-        <img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn" />
-      </a>
-      <a href="https://twitter.com/pratapSiser" target="_blank">
-        <img src="https://img.shields.io/badge/Twitter-1DA1F2?style=for-the-badge&logo=twitter&logoColor=white" alt="Twitter" />
-      </a>
-    </div>
-    <a href="mailto:siserinsevoc@gmail.com" >
-      📧 Email Me
-    </a>
-  </div>
-</div>
-
 ---
 
 <div align="center">
